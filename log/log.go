@@ -53,12 +53,15 @@ func GetLogger(c interface{}) *logrus.Logger {
 	return logger
 }
 
-func getConf(raw interface{}) LogSettings {
+var conf *LogSettings
+
+// check all fields of a struct
+func getConfig(raw interface{}) {
 	if v, ok := raw.(LogSettings); ok {
-		return v
+		conf = &v
 	}
 	if v, ok := raw.(*LogSettings); ok && v != nil {
-		return *v
+		conf = v
 	}
 	getType := reflect.TypeOf(raw)
 	getValue := reflect.ValueOf(raw)
@@ -68,12 +71,17 @@ func getConf(raw interface{}) LogSettings {
 			if reflect.TypeOf(value).Kind() != reflect.Struct {
 				continue
 			}
-			return getConf(value)
+			getConfig(value)
 		}
-		return settings
-	} else {
+	}
+}
+
+func getConf(raw interface{}) LogSettings {
+	getConfig(raw)
+	if conf == nil {
 		return settings
 	}
+	return *conf
 }
 
 // get log level, default level info
