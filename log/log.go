@@ -124,6 +124,7 @@ func getFormatter(c LogSettings) logrus.Formatter {
 	case "colored":
 		return &logrus.TextFormatter{
 			ForceColors: true,
+			FullTimestamp: true,
 		}
 	case "text":
 		return &logrus.TextFormatter{}
@@ -131,6 +132,7 @@ func getFormatter(c LogSettings) logrus.Formatter {
 		return &logrus.JSONFormatter{}
 	default:
 		return &logrus.TextFormatter{
+			FullTimestamp: true,
 			ForceColors: true,
 		}
 	}
