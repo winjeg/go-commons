@@ -1,10 +1,13 @@
 package log
 
 import (
+	"github.com/shiena/ansicolor"
 	"github.com/sirupsen/logrus"
+
 	"io"
 	"os"
 	"reflect"
+	"runtime"
 	"strings"
 	"sync"
 )
@@ -35,7 +38,12 @@ func initLogger(c interface{}) {
 		conf = getConf(c)
 	}
 	l := logrus.New()
-	l.SetOutput(getOutput(conf))
+	// for windows no color output
+	if windows() && strings.EqualFold(conf.Format, "colored") {
+		l.SetOutput(ansicolor.NewAnsiColorWriter(getOutput(conf)))
+	} else {
+		l.SetOutput(getOutput(conf))
+	}
 	l.SetFormatter(getFormatter(conf))
 	l.SetLevel(getLogLevel(conf))
 	l.SetReportCaller(conf.ReportCaller)
@@ -84,6 +92,10 @@ func getConf(raw interface{}) LogSettings {
 	return *conf
 }
 
+func windows() bool {
+	return strings.EqualFold(runtime.GOOS, "windows")
+}
+
 // get log level, default level info
 func getLogLevel(settings LogSettings) logrus.Level {
 	switch strings.ToLower(settings.Level) {
@@ -106,14 +118,21 @@ func getLogLevel(settings LogSettings) logrus.Level {
 	}
 }
 
+
 func getFormatter(c LogSettings) logrus.Formatter {
 	switch c.Format {
+	case "colored":
+		return &logrus.TextFormatter{
+			ForceColors: true,
+		}
 	case "text":
 		return &logrus.TextFormatter{}
 	case "json":
 		return &logrus.JSONFormatter{}
 	default:
-		return &logrus.TextFormatter{}
+		return &logrus.TextFormatter{
+			ForceColors: true,
+		}
 	}
 }
 
