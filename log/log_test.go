@@ -27,7 +27,6 @@ func TestLog(t *testing.T) {
 	// log.Fatal("Bye.")
 	// Calls panic() after logging
 	// log.Panic("I'm bailing.")
-
 }
 
 type abc struct {
