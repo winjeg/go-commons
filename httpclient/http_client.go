@@ -80,6 +80,8 @@ func safeClose(resp *http.Response) {
 	logger := log.GetLogger(nil)
 	if resp != nil && !resp.Close {
 		err := resp.Body.Close()
-		logger.Error("error close response body:%v", err)
+		if err != nil {
+			logger.Error("error close response body:%v", err)
+		}
 	}
 }
