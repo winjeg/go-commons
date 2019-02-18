@@ -115,6 +115,8 @@ func safeClose(resp *http.Response) {
 	logger := log.GetLogger(nil)
 	if resp != nil && !resp.Close {
 		err := resp.Body.Close()
-		logger.Errorf("error close response body:%v", err)
+		if err != nil {
+			logger.Errorf("error close response body:%v", err)
+		}
 	}
 }

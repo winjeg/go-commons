@@ -1,4 +1,12 @@
 # httpClient
+a simple client to make remote http request  and return string response body
+
+currently supported method:
+1. Get
+2. Put   (content type: json)
+3. Post (content type: json)
+4. Delete (content type: json)
+
 
 ## example code
 
