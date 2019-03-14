@@ -8,23 +8,36 @@ import (
 )
 
 const (
-	KindNumber = 0 // numbers only
-	KindLower  = 1 // lower alphabets
-	KindUpper  = 2 // upper alphabets
-	KindAll    = 3 // numbers and alphabets
+	KindNumber         = 0 // numbers only
+	KindLower          = 1 // lower alphabets
+	KindUpper          = 2 // upper alphabets
+	KindAll            = 3 // numbers and alphabets
+	KindAllWithSpecial = 4
 )
 
 // 随机字符串
 func Krand(size int, kind int) []byte {
-	ikind, kinds, result := kind, [][]int{[]int{10, 48}, []int{26, 97}, []int{26, 65}}, make([]byte, size)
-	is_all := kind > 2 || kind < 0
+	kinds := [][]int{{10, 48}, {26, 97}, {26, 65}}
+	specialChars := []byte{95, 45, 46, 35, 36, 37, 38}
+	specialCharLen := len(specialChars)
+	iKind, result := kind, make([]byte, size)
+	isAll := kind == 3
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < size; i++ {
-		if is_all { // random ikind
-			ikind = rand.Intn(3)
+
+		// random iKind
+		if isAll {
+			iKind = rand.Intn(3)
 		}
-		scope, base := kinds[ikind][0], kinds[ikind][1]
-		result[i] = uint8(base + rand.Intn(scope))
+		if kind == KindAllWithSpecial {
+			iKind = rand.Intn(4)
+		}
+		if iKind == 3 {
+			result[i] = specialChars[rand.Intn(specialCharLen)]
+		} else {
+			scope, base := kinds[iKind][0], kinds[iKind][1]
+			result[i] = uint8(base + rand.Intn(scope))
+		}
 	}
 	return result
 }
@@ -43,6 +56,10 @@ func RandomAlphabetsLower(length int) string {
 
 func RandomAlphabetsUpper(length int) string {
 	return string(Krand(length, KindUpper))
+}
+// special chars including _-.#$%&
+func RandomStrWithSpecialChars(length int) string {
+	return string(Krand(length, KindAllWithSpecial))
 }
 
 // generate uuid

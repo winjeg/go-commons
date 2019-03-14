@@ -1,6 +1,7 @@
 package str
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -27,4 +28,20 @@ func TestUUID(t *testing.T) {
 	id1 := UUID()
 	id2 := UUID()
 	assert.NotEqual(t, id1, id2)
+}
+
+func TestGenerateStrings(t *testing.T) {
+	fmt.Println(RandomAlphabetsLower(15))
+	fmt.Println(RandomAlphabetsUpper(15))
+	fmt.Println(RandomNumAlphabets(15))
+	fmt.Println(RandomNumers(15))
+	fmt.Println(RandomStrWithSpecialChars(15))
+
+}
+
+func BenchmarkKrand(b *testing.B) {
+	Krand(30, KindAll)
+	Krand(30, KindUpper)
+	Krand(30, KindNumber)
+	b.ReportAllocs()
 }
