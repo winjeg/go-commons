@@ -1,7 +1,7 @@
 # go-commons
 [![Build Status](https://travis-ci.org/winjeg/go-commons.svg?branch=master)](https://travis-ci.org/winjeg/go-commons)
-golang commonly used  utils and many thing else.
 
+golang commonly used  utils and many thing else.
 ## conf
 conf is a package for reading config file for golang projects.
 in many cases when you need a config file to do some config, but your program or your unit tests 
