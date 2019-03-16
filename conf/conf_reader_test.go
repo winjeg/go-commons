@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	testYmlFile = "test.yaml"
-	testIniFile = "test.ini"
+	testYmlFile = "./test.yaml"
+	testIniFile = "./test.ini"
 
 	host     = "10.1.1.1"
 	port     = 3306
