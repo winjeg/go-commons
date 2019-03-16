@@ -1,0 +1,18 @@
+language: go
+
+go:
+- 1.11.x
+- tip
+
+compiler:
+- gcc
+
+before_install:
+- go get -t -v ./...
+
+script:
+- go build .
+- go test -race -coverprofile=coverage.txt -covermode=atomic
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)

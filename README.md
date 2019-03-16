@@ -1,4 +1,5 @@
 # go-commons
+[![Build Status](https://travis-ci.org/winjeg/go-commons.svg?branch=master)](https://travis-ci.org/winjeg/go-commons)
 golang commonly used  utils and many thing else.
 
 ## conf
