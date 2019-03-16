@@ -7,8 +7,7 @@ go:
 compiler:
 - gcc
 
-before_install:
-- go mod tidy
+before_install: GO111MODULE=on go mod vendor
 
 script:
 - go build .
