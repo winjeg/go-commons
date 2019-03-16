@@ -20,7 +20,8 @@ const (
 	KindAllWithSpecial = 4
 )
 
-// RandStr random strings
+// export RandStr
+// random strings
 func RandStr(size int, kind int) []byte {
 	kinds := [][]int{{10, 48}, {26, 97}, {26, 65}}
 	specialChars := []byte{95, 45, 46, 35, 36, 37, 38}
@@ -53,37 +54,39 @@ func RandomNumAlphabets(length int) string {
 	return string(RandStr(length, KindAll))
 }
 
-// RandomNumers
+// export RandomNumbers
 // random numbers
-func RandomNumers(length int) string {
+func RandomNumbers(length int) string {
 	return string(RandStr(length, KindNumber))
 }
 
-// RandomAlphabetsLower
+// export RandomAlphabetsLower
 // random alphabets in lower case
 func RandomAlphabetsLower(length int) string {
 	return string(RandStr(length, KindLower))
 }
 
-// RandomAlphabetsUpper
+// export RandomAlphabetsUpper
 // random alphabets in upper case
 func RandomAlphabetsUpper(length int) string {
 	return string(RandStr(length, KindUpper))
 }
 
-// RandomStrWithSpecialChars
+// export RandomStrWithSpecialChars
 // random string with special chars including _-.#$%&
 func RandomStrWithSpecialChars(length int) string {
 	return string(RandStr(length, KindAllWithSpecial))
 }
 
-// UUID is to generate unique ids
+// export UUID
+// is to generate unique ids
 func UUID() string {
 	uid := uuid.NewV4()
 	return uid.String()
 }
 
-// UUIDShort this method will generate a unique id using uuid, but the result is too long
+// export UUIDShort
+// this method will generate a unique id using uuid, but the result is too long
 // so we just use the digits from 0 to 8, thus, increasing the possibility to get a
 // duplicated id, but It's okay
 // not true uuid, not for tons of ids
@@ -93,19 +96,19 @@ func UUIDShort() string {
 	return d[24:] + d[9:13]
 }
 
-// IsEmpty
+// export IsEmpty
 // judge if a string is empty
 func IsEmpty(str string) bool {
 	return len(str) == 0
 }
 
-// IsBlank
+// export IsBlank
 // judge if a string is blank
 func IsBlank(str string) bool {
 	return len(strings.TrimSpace(str)) == 0
 }
 
-// ReplaceAll
+// export ReplaceAll
 // replace all old str to new str for a string
 func ReplaceAll(src, old, new string) string {
 	return strings.Replace(src, old, new, -1)

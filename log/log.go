@@ -24,6 +24,7 @@ var (
 	logger *logrus.Logger
 )
 
+// export LogSettings
 // supporting ini/yaml/json
 type LogSettings struct {
 	Output       string `json:"output" yaml:"output" ini:"output"`
@@ -50,14 +51,14 @@ func initLogger(c interface{}) {
 	logger = l
 }
 
+// export GetLogger
 func GetLogger(c interface{}) *logrus.Logger {
 	if logger != nil {
 		return logger
-	} else {
-		lock.Lock()
-		initLogger(c)
-		lock.Unlock()
 	}
+	lock.Lock()
+	initLogger(c)
+	lock.Unlock()
 	return logger
 }
 

@@ -16,8 +16,14 @@ func TestGenerateStrings(t *testing.T) {
 	fmt.Println(RandomAlphabetsLower(15))
 	fmt.Println(RandomAlphabetsUpper(15))
 	fmt.Println(RandomNumAlphabets(15))
-	fmt.Println(RandomNumers(15))
+	fmt.Println(RandomNumbers(15))
 	fmt.Println(RandomStrWithSpecialChars(15))
+	str := UUIDShort()
+	assert.NotNil(t, str)
+	assert.True(t, !IsBlank(str))
+	assert.True(t, !IsEmpty(str))
+	r := ReplaceAll(str, "a", "A")
+	assert.NotNil(t, r)
 }
 
 func BenchmarkKrand(b *testing.B) {

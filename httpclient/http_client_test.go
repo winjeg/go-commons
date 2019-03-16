@@ -29,6 +29,8 @@ func TestPostDelete(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Empty(t, r1)
 	r2, err := Put("https://cn.bing.com/api/dx", "")
+	r3, _ := Post("https://cn.bing.com/api/dx", "")
 	assert.NotNil(t, err)
 	assert.Empty(t, r2)
+	assert.Empty(t, r3)
 }

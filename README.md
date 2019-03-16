@@ -1,6 +1,7 @@
 # go-commons
 [![Build Status](https://travis-ci.org/winjeg/go-commons.svg?branch=master)](https://travis-ci.org/winjeg/go-commons)
 [![Go Report Card](https://goreportcard.com/badge/github.com/winjeg/go-commons)](https://goreportcard.com/report/github.com/winjeg/go-commons)
+[![codecov](https://codecov.io/gh/winjeg/go-commons/branch/master/graph/badge.svg)](https://codecov.io/gh/winjeg/go-commons)
 
 golang commonly used  utils and many thing else.
 ## conf

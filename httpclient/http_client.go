@@ -17,6 +17,7 @@ var (
 	httpClient = &http.Client{Timeout: time.Second * 3}
 )
 
+// export GetWithParams
 // Get request with url params
 func GetWithParams(uri string, paramMap map[string]string) (string, error) {
 	url := uri + "?"
@@ -88,7 +89,8 @@ func Put(url, content string) (string, error) {
 	return string(data), err
 }
 
-// Post request by url
+// export Delete
+// delete request by url
 // content type is application/json
 func Delete(url, content string) (string, error) {
 	logger := log.GetLogger(nil)

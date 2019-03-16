@@ -29,4 +29,5 @@ func TestFromString(t *testing.T) {
 	assert.Empty(t, q)
 	x := FromString("tom")
 	assert.Empty(t, x)
+	assert.NotNil(t, p.String())
 }
