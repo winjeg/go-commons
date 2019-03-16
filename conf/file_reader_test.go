@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-const testFileName  = "readme.md"
+const testFileName = "readme.md"
 
 // read config file
 func TestReadConfigFile(t *testing.T) {

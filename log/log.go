@@ -118,12 +118,11 @@ func getLogLevel(settings LogSettings) logrus.Level {
 	}
 }
 
-
 func getFormatter(c LogSettings) logrus.Formatter {
 	switch c.Format {
 	case "colored":
 		return &logrus.TextFormatter{
-			ForceColors: true,
+			ForceColors:   true,
 			FullTimestamp: true,
 		}
 	case "text":
@@ -133,7 +132,7 @@ func getFormatter(c LogSettings) logrus.Formatter {
 	default:
 		return &logrus.TextFormatter{
 			FullTimestamp: true,
-			ForceColors: true,
+			ForceColors:   true,
 		}
 	}
 }

@@ -50,7 +50,7 @@ func LoadFile(fileName string) (Properties, error) {
 	return parseFile(file)
 }
 
-func FromString(content string) (Properties) {
+func FromString(content string) Properties {
 	if len(content) < 1 {
 		return map[string]string{}
 	}

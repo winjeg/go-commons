@@ -57,6 +57,7 @@ func RandomAlphabetsLower(length int) string {
 func RandomAlphabetsUpper(length int) string {
 	return string(Krand(length, KindUpper))
 }
+
 // special chars including _-.#$%&
 func RandomStrWithSpecialChars(length int) string {
 	return string(Krand(length, KindAllWithSpecial))
@@ -80,7 +81,7 @@ func UUIDShort() string {
 
 // judge if a string is empty
 func IsEmpty(str string) bool {
-	return len(str) == 0;
+	return len(str) == 0
 }
 
 // judge if a string is blank
