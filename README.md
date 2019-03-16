@@ -92,11 +92,8 @@ import (
 
 var logger = log.GetLogger(nil)
 func loggerTest() {
-		logger.Trace("Something very low level.")
-    	logger.Debug("Useful debugging information.")
+        // Debug, Warn, Trace, Error
     	logger.Info("Something noteworthy happened!")
-    	logger.Warn("You should probably take a look at this.")
-    	logger.Error("Something failed but I'm not quitting.")
 }
 
 ```
@@ -123,7 +120,6 @@ func test() {
 }
 ```
 
-
 ## str
 an unique id generator to generate unique id from
 
@@ -136,6 +132,14 @@ func TestUUID(t *testing.T) {
 }
 
 ```
+
+## properties
+read properties from string or from file,and convert a map to a property file
+```properties
+ip=127.0.0.1
+name=tom
+```
+
 
 ## and others
 ... to be planned
