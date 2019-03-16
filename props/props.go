@@ -13,6 +13,7 @@ var (
 	regex = regexp.MustCompile(`^([^=]+)=(.*)$`)
 )
 
+// properties map, key values
 type Properties map[string]string
 
 func parseFile(in io.Reader) (Properties, error) {
@@ -42,6 +43,7 @@ func parseFile(in io.Reader) (Properties, error) {
 	return props, nil
 }
 
+// load properties from file
 func LoadFile(fileName string) (Properties, error) {
 	file, err := os.Open(fileName)
 	if err != nil {
@@ -50,6 +52,7 @@ func LoadFile(fileName string) (Properties, error) {
 	return parseFile(file)
 }
 
+// load properties from a string
 func FromString(content string) Properties {
 	if len(content) < 1 {
 		return map[string]string{}
@@ -70,6 +73,7 @@ func FromString(content string) Properties {
 	return result
 }
 
+// convert properties to a string
 func (p Properties) String() string {
 	result := ""
 	for k, v := range p {

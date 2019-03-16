@@ -21,9 +21,9 @@ func TestGenerateStrings(t *testing.T) {
 }
 
 func BenchmarkKrand(b *testing.B) {
-	Krand(30, KindAll)
-	Krand(30, KindUpper)
-	Krand(30, KindNumber)
+	RandStr(30, KindAll)
+	RandStr(30, KindUpper)
+	RandStr(30, KindNumber)
 	b.ReportAllocs()
 }
 

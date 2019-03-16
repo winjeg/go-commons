@@ -11,7 +11,7 @@ import (
 	"runtime"
 )
 
-// yaml config file to an object
+// Yaml2Object  yaml config file to an object
 func Yaml2Object(fileName string, object interface{}) error {
 	var srcDir = "."
 	if _, fileNameWithPath, _, ok := runtime.Caller(1); ok {
@@ -24,7 +24,7 @@ func Yaml2Object(fileName string, object interface{}) error {
 	return yaml.Unmarshal(d, object)
 }
 
-// ini config to object
+// Ini2Object ini config to object
 func Ini2Object(fileName string, object interface{}) error {
 	var srcDir = "."
 	if _, fileNameWithPath, _, ok := runtime.Caller(1); ok {

@@ -12,12 +12,12 @@ import (
 	"strings"
 )
 
-// 5秒的超时时间
 var (
+	// 3 seconds timeout
 	httpClient = &http.Client{Timeout: time.Second * 3}
 )
 
-// 对其进行简单封装， 可以传参数列表的map
+// Get request with url params
 func GetWithParams(uri string, paramMap map[string]string) (string, error) {
 	url := uri + "?"
 	for k, v := range paramMap {
@@ -64,7 +64,7 @@ func Post(url, content string) (string, error) {
 	return string(data), err
 }
 
-// Post request by url
+// Put request by url
 // content type is application/json
 func Put(url, content string) (string, error) {
 	logger := log.GetLogger(nil)

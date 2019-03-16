@@ -82,7 +82,7 @@ func getConfigFileFromExecutable(fileName string) *os.File {
 	return f
 }
 
-// read config file first from where the executable file lies
+// ReadConfigFile  read config file first from where the executable file lies
 // then where the source code lies, or it's parent directory recursively
 func ReadConfigFile(fileName, srcFile string) []byte {
 	f := getConfigFileFromExecutable(fileName)

@@ -19,7 +19,8 @@ func TestGetWithParams(t *testing.T) {
 	d, err := GetWithParams("https://www.so.com/s", m)
 	assert.Equal(t, true, err == nil)
 	assert.Equal(t, true, len(d) > 0)
-	w, err := GetWithParams("https://www.so.com/sasdasdas", nil)
+	w, err2 := GetWithParams("https://www.so.com/sasdasdas", nil)
+	assert.Nil(t, err2)
 	assert.Equal(t, true, len(w) == 0)
 }
 

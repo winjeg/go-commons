@@ -8,15 +8,20 @@ import (
 )
 
 const (
-	KindNumber         = 0 // numbers only
-	KindLower          = 1 // lower alphabets
-	KindUpper          = 2 // upper alphabets
-	KindAll            = 3 // numbers and alphabets
+	// numbers only
+	KindNumber = 0
+	// lower alphabets
+	KindLower = 1
+	// upper alphabets
+	KindUpper = 2
+	// numbers and alphabets
+	KindAll = 3
+	// all kinds with special chars
 	KindAllWithSpecial = 4
 )
 
-// 随机字符串
-func Krand(size int, kind int) []byte {
+// RandStr random strings
+func RandStr(size int, kind int) []byte {
 	kinds := [][]int{{10, 48}, {26, 97}, {26, 65}}
 	specialChars := []byte{95, 45, 46, 35, 36, 37, 38}
 	specialCharLen := len(specialChars)
@@ -42,34 +47,43 @@ func Krand(size int, kind int) []byte {
 	return result
 }
 
+// RandomNumAlphabets
+// random number and alphabets
 func RandomNumAlphabets(length int) string {
-	return string(Krand(length, KindAll))
+	return string(RandStr(length, KindAll))
 }
 
+// RandomNumers
+// random numbers
 func RandomNumers(length int) string {
-	return string(Krand(length, KindNumber))
+	return string(RandStr(length, KindNumber))
 }
 
+// RandomAlphabetsLower
+// random alphabets in lower case
 func RandomAlphabetsLower(length int) string {
-	return string(Krand(length, KindLower))
+	return string(RandStr(length, KindLower))
 }
 
+// RandomAlphabetsUpper
+// random alphabets in upper case
 func RandomAlphabetsUpper(length int) string {
-	return string(Krand(length, KindUpper))
+	return string(RandStr(length, KindUpper))
 }
 
-// special chars including _-.#$%&
+// RandomStrWithSpecialChars
+// random string with special chars including _-.#$%&
 func RandomStrWithSpecialChars(length int) string {
-	return string(Krand(length, KindAllWithSpecial))
+	return string(RandStr(length, KindAllWithSpecial))
 }
 
-// generate uuid
+// UUID is to generate unique ids
 func UUID() string {
 	uid := uuid.NewV4()
 	return uid.String()
 }
 
-// this method will generate a unique id using uuid, but the result is too long
+// UUIDShort this method will generate a unique id using uuid, but the result is too long
 // so we just use the digits from 0 to 8, thus, increasing the possibility to get a
 // duplicated id, but It's okay
 // not true uuid, not for tons of ids
@@ -79,16 +93,19 @@ func UUIDShort() string {
 	return d[24:] + d[9:13]
 }
 
+// IsEmpty
 // judge if a string is empty
 func IsEmpty(str string) bool {
 	return len(str) == 0
 }
 
+// IsBlank
 // judge if a string is blank
 func IsBlank(str string) bool {
 	return len(strings.TrimSpace(str)) == 0
 }
 
+// ReplaceAll
 // replace all old str to new str for a string
 func ReplaceAll(src, old, new string) string {
 	return strings.Replace(src, old, new, -1)
