@@ -1,39 +1,33 @@
 package httpclient
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 
-	"strings"
 	"testing"
 )
 
 func TestGet(t *testing.T) {
-	d, err := Get("https://www.baidu.com")
-	assert.Equal(t, err == nil, true)
-	assert.Equal(t, len(d) > 0, true)
+	d, err := Get("https://www.so.com")
+	assert.Equal(t, true, err == nil)
+	assert.Equal(t, true, len(d) > 0)
 }
 
 func TestGetWithParams(t *testing.T) {
 	m := make(map[string]string, 2)
-	m["tn"] = "baidu"
-	m["wd"] = "s"
-	d, err := GetWithParams("https://www.baidu.com/s", m)
-	assert.Equal(t, err == nil, true)
-	assert.Equal(t, len(d) > 0, true)
-	w, err := GetWithParams("https://www.baidu.com/sasdasdas", nil)
-	assert.Equal(t, strings.Index(w, "页面不存在") > -1, true)
+	m["ie"] = "utf-8"
+	m["q"] = "test"
+	d, err := GetWithParams("https://www.so.com/s", m)
+	assert.Equal(t, true, err == nil)
+	assert.Equal(t, true, len(d) > 0)
+	w, err := GetWithParams("https://www.so.com/sasdasdas", nil)
+	assert.Equal(t, true, len(w) == 0)
 }
 
 func TestPostDelete(t *testing.T) {
-	r1, err := Delete("https://www.baidu.com/api/dx", "")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	fmt.Println(r1)
-	r2, err := Put("https://www.baidu.com/api/dx", "")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	fmt.Println(r2)
+	r1, err := Delete("https://www.so.com/api/dx", "")
+	assert.NotNil(t, err)
+	assert.Empty(t, r1)
+	r2, err := Put("https://www.so.com/api/dx", "")
+	assert.NotNil(t, err)
+	assert.Empty(t, r2)
 }

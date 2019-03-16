@@ -1,8 +1,8 @@
 package log
 
 import (
-	"fmt"
 	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -47,8 +47,8 @@ func TestStruct(t *testing.T) {
 	var x bcd
 	x.A.B.Level = "DEBUG"
 	v := getConf(x)
-	fmt.Printf("%v\n", v)
+	assert.NotNil(t, v)
 	var a cde
 	m := getConf(a)
-	fmt.Printf("%v\n", m)
+	assert.NotNil(t, m)
 }

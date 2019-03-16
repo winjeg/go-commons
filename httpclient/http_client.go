@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/winjeg/go-commons/log"
 	"strconv"
+	"time"
 
 	"fmt"
 	"io/ioutil"
@@ -13,7 +14,7 @@ import (
 
 // 5秒的超时时间
 var (
-	httpClient = &http.Client{Timeout: 5e9}
+	httpClient = &http.Client{Timeout: time.Second * 3}
 )
 
 // 对其进行简单封装， 可以传参数列表的map

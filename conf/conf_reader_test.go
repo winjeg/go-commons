@@ -1,7 +1,7 @@
 package goconf
 
 import (
-	"strings"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -9,8 +9,8 @@ const (
 	testYmlFile = "test.yaml"
 	testIniFile = "test.ini"
 
-	host = "10.1.1.1"
-	port = 3306
+	host     = "10.1.1.1"
+	port     = 3306
 	testName = "tom"
 )
 
@@ -32,21 +32,16 @@ type TestIniConf struct {
 func TestYaml2Object(t *testing.T) {
 	var x TestYmlConf
 	err := Yaml2Object(testYmlFile, &x)
-	if err != nil {
-		t.FailNow()
-	}
-	if !strings.EqualFold(x.DbAddr, host) || x.Port != port {
-		t.FailNow()
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, host, x.DbAddr)
+	assert.Equal(t, port, x.Port)
 }
 
 func TestIni2Object(t *testing.T) {
 	var x TestMyConf
 	err := Ini2Object(testIniFile, &x)
-	if err != nil {
-		t.FailNow()
-	}
-	if !strings.EqualFold(x.Mysql.Host, host) || x.Mysql.Port != port || !strings.EqualFold(testName, x.Name) {
-		t.FailNow()
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, host, x.Mysql.Host)
+	assert.Equal(t, port, x.Mysql.Port)
+	assert.Equal(t, testName, x.Name)
 }
