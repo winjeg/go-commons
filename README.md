@@ -1,6 +1,7 @@
 # go-commons
 [![Build Status](https://travis-ci.org/winjeg/go-commons.svg?branch=master)](https://travis-ci.org/winjeg/go-commons)
 [![Go Report Card](https://goreportcard.com/badge/github.com/winjeg/go-commons)](https://goreportcard.com/report/github.com/winjeg/go-commons)
+[![GolangCI](https://golangci.com/badges/github.com/winjeg/go-commons.svg)](https://golangci.com/r/github.com/winjeg/go-commons)
 [![codecov](https://codecov.io/gh/winjeg/go-commons/branch/master/graph/badge.svg)](https://codecov.io/gh/winjeg/go-commons)
 [![Join the chat at https://gitter.im/winjeg/go-commons](https://img.shields.io/gitter/room/winjeg/go-commons.svg)](https://gitter.im/winjeg/go-commons?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
