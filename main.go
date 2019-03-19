@@ -1,7 +1,13 @@
 package main
 
-import "github.com/winjeg/go-commons/httpclient"
+import (
+	"fmt"
+	"github.com/winjeg/go-commons/httpclient"
+)
 
 func main() {
-	httpclient.Get("https://www.so.com")
+	_, err := httpclient.Get("https://www.bing.com")
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
