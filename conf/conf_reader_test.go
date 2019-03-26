@@ -1,4 +1,4 @@
-package goconf
+package conf
 
 import (
 	"github.com/stretchr/testify/assert"

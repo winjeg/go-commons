@@ -1,7 +1,7 @@
 // copyleft anyone can use this code freely, and this repo will remain active
 // welcome to come up with any kind of issues relating to this project
 
-package goconf
+package conf
 
 import (
 	"github.com/winjeg/go-commons/log"
