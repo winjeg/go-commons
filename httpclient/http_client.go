@@ -76,6 +76,7 @@ func Put(url, content string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	req.Close = true
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		logger.Errorf("%v", err)
@@ -101,6 +102,7 @@ func Delete(url, content string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	req.Close = true
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		logger.Errorf("%v", err)
