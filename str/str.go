@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+	"unsafe"
 )
 
 const (
@@ -112,4 +113,43 @@ func IsBlank(str string) bool {
 // replace all old str to new str for a string
 func ReplaceAll(src, old, new string) string {
 	return strings.Replace(src, old, new, -1)
+}
+
+// remove the leading comma and trailing comma
+func TrimComma(str string) string {
+	return Trim(str, ",")
+}
+
+// remove leading and trailing dot
+func TrimDot(str string) string {
+	return Trim(str, ".")
+}
+
+// trim something down, not a cut set. which is much different from strings.Trim
+func Trim(str, trim string) string {
+	str = strings.TrimSpace(str)
+	if strings.EqualFold(str[len(str)-len(trim):], trim) {
+		str = str[:len(str)-len(trim)]
+	}
+	if strings.EqualFold(str[0:len(trim)], trim) {
+		str = str[len(trim):]
+	}
+	return str
+}
+
+// same as the strings.Join
+func Join(strs []string, j string) string {
+	return strings.Join(strs, j)
+}
+
+// convert a string to a byte
+func ToBytes(str string) []byte {
+	bs := (*[2]uintptr)(unsafe.Pointer(&str))
+	b := [3]uintptr{bs[0], bs[1], bs[1]}
+	return *(*[]byte)(unsafe.Pointer(&b))
+}
+
+// convert a byte array to a string
+func FromBytes(data []byte) string {
+	return *(*string)(unsafe.Pointer(&data))
 }

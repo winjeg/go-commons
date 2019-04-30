@@ -48,3 +48,35 @@ func BenchmarkGenerateUniqueId(b *testing.B) {
 	}
 	b.ReportAllocs()
 }
+
+func TestTrim(t *testing.T) {
+	a := ",abc,efg.,"
+	b := TrimComma(a)
+	assert.Equal(t, b, "abc,efg.")
+	c := TrimDot(b)
+	assert.Equal(t, "abc,efg", c)
+	d := Trim(a, ".,")
+	assert.Equal(t, d, ",abc,efg")
+}
+
+func BenchmarkJoin(t *testing.B) {
+	for i := 0; i < t.N; i++ {
+		Join([]string{"a", "b"}, "c")
+	}
+}
+
+func TestConvert(t *testing.T) {
+	a := "123中国人"
+	bts := ToBytes(a)
+	b := FromBytes(bts)
+	assert.Equal(t, a, b)
+}
+
+func BenchmarkConvert(b *testing.B) {
+	a := "123中国人"
+	for i := 0; i < b.N; i++ {
+		bts := ToBytes(a)
+		FromBytes(bts)
+	}
+	b.ReportAllocs()
+}
