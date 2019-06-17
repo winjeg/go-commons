@@ -17,6 +17,7 @@ When you deploy executables the config file should be along with the executables
 
 supports both yaml and ini config files
 ### examples
+
 ```go
 package goconf
 
