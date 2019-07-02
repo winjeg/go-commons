@@ -1,13 +1,7 @@
 package main
 
-import (
-	"fmt"
-	"github.com/winjeg/go-commons/httpclient"
-)
+import "fmt"
 
 func main() {
-	_, err := httpclient.Get("https://www.bing.com")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	fmt.Println("Everything works!")
 }
