@@ -1,11 +1,11 @@
-package db
+package uid
 
 import (
-	"github.com/winjeg/go-commons/log"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
 	"github.com/sony/sonyflake"
+	"github.com/winjeg/go-commons/log"
 )
 
 // package that provides unique ids
