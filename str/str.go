@@ -1,11 +1,12 @@
 package str
 
 import (
-	"github.com/satori/go.uuid"
 	"math/rand"
 	"strings"
 	"time"
 	"unsafe"
+
+	"github.com/satori/go.uuid"
 )
 
 const (
