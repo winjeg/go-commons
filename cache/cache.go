@@ -9,6 +9,10 @@ const (
 	defaultCacheSize = 128
 )
 
+var (
+	beginTime = time.Unix(0, 0)
+)
+
 type cacheValue struct {
 	Value  interface{}
 	Expire time.Time
@@ -16,8 +20,7 @@ type cacheValue struct {
 
 // get cache value, nil will be returned if if has expired
 func (c *cacheValue) Get() interface{} {
-	currentNano := time.Now()
-	if c.Expire.After(currentNano) {
+	if c.Expire.After(time.Now()) || c.Expire.Equal(beginTime) {
 		return c.Value
 	}
 	return nil
@@ -44,7 +47,7 @@ func (cm *cacheManager) mayInit() {
 func (cm *cacheManager) Get(k string) interface{} {
 	cm.mayInit()
 	if v, ok := cm.Cache[k]; ok {
-		r :=  v.Get()
+		r := v.Get()
 		if r == nil {
 			cm.Lock.Lock()
 			delete(cm.Cache, k)
@@ -58,14 +61,17 @@ func (cm *cacheManager) Get(k string) interface{} {
 }
 
 // expire in milliseconds
+// if expire time <= 0, then the key never expires
 func (cm *cacheManager) Put(k string, val interface{}, exp int) {
 	cm.mayInit()
-	if exp <= 0 {
-		return
-	}
 	cm.Lock.Lock()
 	var cacheValue cacheValue
-	expire := time.Now().Add(time.Millisecond * time.Duration(exp))
+	var expire time.Time
+	if exp <= 0 {
+		expire = time.Unix(0, 0)
+	} else {
+		expire = time.Now().Add(time.Millisecond * time.Duration(exp))
+	}
 	cacheValue.Set(val, expire)
 	cm.Cache[k] = cacheValue
 	cm.Lock.Unlock()

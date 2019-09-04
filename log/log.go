@@ -1,15 +1,15 @@
 package log
 
 import (
-	"github.com/shiena/ansicolor"
-	"github.com/sirupsen/logrus"
-
 	"io"
 	"os"
 	"reflect"
 	"runtime"
 	"strings"
 	"sync"
+
+	"github.com/shiena/ansicolor"
+	"github.com/sirupsen/logrus"
 )
 
 var (

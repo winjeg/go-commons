@@ -1,9 +1,9 @@
 package props
 
 import (
-	"github.com/stretchr/testify/assert"
-
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const fileName = "test.props"

@@ -1,16 +1,17 @@
 package cache
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 const (
-	testKey = "key1"
-	testValue = "val2"
+	testKey    = "key1"
+	testValue  = "val2"
 	testValue2 = "Val2"
-	testExp = 5
+	testExp    = 5
 )
 
 func TestGet(t *testing.T) {

@@ -4,14 +4,14 @@
 package conf
 
 import (
-	"github.com/winjeg/go-commons/log"
-
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/winjeg/go-commons/log"
 )
 
 // get parent directory of the current directory

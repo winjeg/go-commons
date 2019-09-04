@@ -2,6 +2,7 @@ package str
 
 import (
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 	"unsafe"
@@ -153,4 +154,71 @@ func ToBytes(str string) []byte {
 // convert a byte array to a string
 func FromBytes(data []byte) string {
 	return *(*string)(unsafe.Pointer(&data))
+}
+
+// same as the strings.Join
+func JoinInt(arr []int, j string) string {
+	if len(arr) == 0 {
+		return ""
+	}
+	var result string
+	for _, v := range arr {
+		result += strconv.Itoa(v) + j
+	}
+	return result[:len(result)-1]
+}
+
+// split strings
+func SplitInt(ori, sep string) ([]int, error) {
+	if len(ori) == 0 {
+		return nil, nil
+	}
+	arr := strings.Split(ori, sep)
+	result := make([]int, 0, len(arr))
+	for _, v := range arr {
+		i, err := strconv.Atoi(v)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, i)
+	}
+	return result, nil
+}
+
+func SplitInt64(ori, sep string) ([]int64, error) {
+	if len(ori) == 0 {
+		return nil, nil
+	}
+	arr := strings.Split(ori, sep)
+	result := make([]int64, 0, len(arr))
+	for _, v := range arr {
+		i, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, i)
+	}
+	return result, nil
+}
+
+// join args if the args is not empty
+func JoinIfNotEmpty(sep string, args ...string) string {
+	if len(args) < 1 {
+		return ""
+	}
+	newArr := make([]string, 0, len(args))
+	for i := range args {
+		if len(args[i]) > 0 {
+			newArr = append(newArr, args[i])
+		}
+	}
+	var result string
+	for i := range newArr {
+		if i == len(newArr)-1 {
+			result += newArr[i]
+		} else {
+			result += newArr[i] + sep
+		}
+	}
+	return result
 }

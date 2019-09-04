@@ -4,11 +4,11 @@
 package conf
 
 import (
-	"gopkg.in/ini.v1"
-	"gopkg.in/yaml.v2"
-
 	"errors"
 	"runtime"
+
+	"gopkg.in/ini.v1"
+	"gopkg.in/yaml.v2"
 )
 
 // Yaml2Object  yaml config file to an object

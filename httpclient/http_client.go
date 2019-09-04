@@ -2,19 +2,19 @@ package httpclient
 
 import (
 	"errors"
-	"github.com/winjeg/go-commons/log"
-	"strconv"
-	"time"
-
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
+	"time"
+
+	"github.com/winjeg/go-commons/log"
 )
 
 var (
 	// 3 seconds timeout
-	httpClient = &http.Client{Timeout: time.Second * 3}
+	httpClient = &http.Client{Timeout: time.Second * 5}
 )
 
 // export GetWithParams
@@ -42,6 +42,26 @@ func Get(url string) (string, error) {
 	}
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
+	}
+	data, err := ioutil.ReadAll(resp.Body)
+	defer safeClose(resp)
+	return string(data), err
+}
+
+func GetWithHeader(url string, header http.Header) (string, error) {
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header = header
+	req.Close = true
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	if resp.StatusCode != http.StatusOK {
+		data, _ := ioutil.ReadAll(resp.Body)
+		return string(data), errors.New(fmt.Sprintf("Error with not correct status code %s", resp.Status))
 	}
 	data, err := ioutil.ReadAll(resp.Body)
 	defer safeClose(resp)

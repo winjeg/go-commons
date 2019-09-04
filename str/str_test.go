@@ -2,8 +2,9 @@ package str
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUUID(t *testing.T) {
@@ -79,4 +80,17 @@ func BenchmarkConvert(b *testing.B) {
 		FromBytes(bts)
 	}
 	b.ReportAllocs()
+}
+
+func TestJoin(t *testing.T) {
+	joinStr := JoinInt([]int{1, 2}, ",")
+	assert.Equal(t, joinStr, "1,2")
+	arr, err := SplitInt(joinStr, ",")
+	assert.Nil(t, err)
+	assert.Len(t, arr, 2)
+	arr2, err2 := SplitInt64(joinStr, ",")
+	assert.Nil(t, err2)
+	assert.Len(t, arr2, 2)
+	result := JoinIfNotEmpty(",", "a", "", "c")
+	assert.Equal(t, result, "a,c")
 }
