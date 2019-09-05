@@ -14,7 +14,7 @@ import (
 
 var (
 	// 3 seconds timeout
-	httpClient = &http.Client{Timeout: time.Second * 5}
+	httpClient = &http.Client{Timeout: time.Second * 30}
 )
 
 // export GetWithParams
