@@ -53,3 +53,9 @@ func TestStruct(t *testing.T) {
 	m := getConf(a)
 	assert.NotNil(t, m)
 }
+
+func TestGetLogger(t *testing.T) {
+	lg := logrus.New()
+	lg.Out = &ConfigWriter{FileName: "E:/Desktop/a.log", Std: true}
+	lg.Info("aaaaaaaaaaaaaa")
+}
