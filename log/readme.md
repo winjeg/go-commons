@@ -38,4 +38,19 @@ func TestLog(t *testing.T) {
 	l.Panic("I'm bailing.")
 
 }
+
+
+func TestNewLogger(t *testing.T) {
+	settings.FileConfig = &RotateFileConfig{
+		Filename:   "E:/Desktop/a.log",
+		MaxSize:    500,
+		MaxBackups: 7,
+		MaxAge:     7,
+		Level:      logrus.DebugLevel,
+		Formatter:  &logrus.TextFormatter{
+		},
+	}
+	l := NewLogger(settings)
+	l.Info("hello, world!")
+}
 ```

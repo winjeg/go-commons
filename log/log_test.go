@@ -1,10 +1,9 @@
 package log
 
 import (
-	"testing"
-
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 // the full example usage of log package
@@ -32,7 +31,7 @@ func TestLog(t *testing.T) {
 
 type abc struct {
 	A string
-	B LogSettings
+	B Settings
 }
 
 type bcd struct {
@@ -54,8 +53,15 @@ func TestStruct(t *testing.T) {
 	assert.NotNil(t, m)
 }
 
-func TestGetLogger(t *testing.T) {
-	lg := logrus.New()
-	lg.Out = &ConfigWriter{FileName: "E:/Desktop/a.log", Std: true}
-	lg.Info("aaaaaaaaaaaaaa")
+func TestNewLogger(t *testing.T) {
+	settings.FileConfig = &RotateFileConfig{
+		Filename:   "E:/Desktop/a.log",
+		MaxSize:    500,
+		MaxBackups: 7,
+		MaxAge:     7,
+		Level:      logrus.DebugLevel,
+		Formatter:  &logrus.TextFormatter{},
+	}
+	l := NewLogger(settings)
+	l.Info("hello, world!")
 }

@@ -14,7 +14,7 @@ import (
 
 var (
 	//default settings
-	settings = LogSettings{
+	settings = Settings{
 		Output:       "std",
 		Format:       "text",
 		Level:        "info",
@@ -24,20 +24,46 @@ var (
 	logger *logrus.Logger
 )
 
-// export LogSettings
+// export Settings
 // supporting ini/yaml/json
-type LogSettings struct {
-	Output       string `json:"output" yaml:"output" ini:"output"`
-	Format       string `json:"format" yaml:"format" ini:"format"`
-	Level        string `json:"level" yaml:"level" ini:"level"`
-	ReportCaller bool   `json:"reportCaller" yaml:"report-caller" ini:"report-caller"`
+
+type LogSettings = Settings
+
+type Settings struct {
+	Output       string            `json:"output" yaml:"output" ini:"output"`
+	Format       string            `json:"format" yaml:"format" ini:"format"`
+	Level        string            `json:"level" yaml:"level" ini:"level"`
+	ReportCaller bool              `json:"reportCaller" yaml:"report-caller" ini:"report-caller"`
+	FileConfig   *RotateFileConfig `json:"fileConfig" yaml:"file-config" ini:"file-config"`
 }
 
-func initLogger(c interface{}) {
+// export GetLogger
+func GetLogger(c interface{}) *logrus.Logger {
+	if logger != nil {
+		return logger
+	}
+	lock.Lock()
+	logger = newLogger(c)
+	lock.Unlock()
+	return logger
+}
+
+func NewLogger(c interface{}) *logrus.Logger {
+	return newLogger(c)
+}
+
+func IgnoreErrors(errors ...interface{}) {
+	if len(errors) > 0 {
+		return
+	}
+}
+
+func newLogger(c interface{}) *logrus.Logger {
 	var conf = settings
 	if c != nil {
 		conf = getConf(c)
 	}
+
 	l := logrus.New()
 	// for windows no color output
 	if windows() && strings.EqualFold(conf.Format, "colored") {
@@ -48,28 +74,23 @@ func initLogger(c interface{}) {
 	l.SetFormatter(getFormatter(conf))
 	l.SetLevel(getLogLevel(conf))
 	l.SetReportCaller(conf.ReportCaller)
-	logger = l
-}
-
-// export GetLogger
-func GetLogger(c interface{}) *logrus.Logger {
-	if logger != nil {
-		return logger
+	if conf.FileConfig != nil {
+		hook, err := NewRotateFileHook(*conf.FileConfig)
+		if err == nil {
+			l.AddHook(hook)
+		}
 	}
-	lock.Lock()
-	initLogger(c)
-	lock.Unlock()
-	return logger
+	return l
 }
 
-var conf *LogSettings
+var conf *Settings
 
 // check all fields of a struct
 func getConfig(raw interface{}) {
-	if v, ok := raw.(LogSettings); ok {
+	if v, ok := raw.(Settings); ok {
 		conf = &v
 	}
-	if v, ok := raw.(*LogSettings); ok && v != nil {
+	if v, ok := raw.(*Settings); ok && v != nil {
 		conf = v
 	}
 	getType := reflect.TypeOf(raw)
@@ -85,7 +106,7 @@ func getConfig(raw interface{}) {
 	}
 }
 
-func getConf(raw interface{}) LogSettings {
+func getConf(raw interface{}) Settings {
 	getConfig(raw)
 	if conf == nil {
 		return settings
@@ -98,7 +119,7 @@ func windows() bool {
 }
 
 // get log level, default level info
-func getLogLevel(settings LogSettings) logrus.Level {
+func getLogLevel(settings Settings) logrus.Level {
 	switch strings.ToLower(settings.Level) {
 	case "trace":
 		return logrus.TraceLevel
@@ -119,7 +140,7 @@ func getLogLevel(settings LogSettings) logrus.Level {
 	}
 }
 
-func getFormatter(c LogSettings) logrus.Formatter {
+func getFormatter(c Settings) logrus.Formatter {
 	switch c.Format {
 	case "colored":
 		return &logrus.TextFormatter{
@@ -138,7 +159,7 @@ func getFormatter(c LogSettings) logrus.Formatter {
 	}
 }
 
-func getOutput(c LogSettings) io.Writer {
+func getOutput(c Settings) io.Writer {
 	switch c.Output {
 	case "std":
 		return os.Stdout
