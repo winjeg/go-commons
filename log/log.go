@@ -5,6 +5,7 @@ import (
 	"os"
 	"reflect"
 	"runtime"
+	"runtime/debug"
 	"strings"
 	"sync"
 
@@ -18,7 +19,7 @@ var (
 		Output:       "std",
 		Format:       "colored",
 		Level:        "info",
-		ReportCaller: true,
+		ReportCaller: false,
 	}
 	lock   sync.Mutex
 	logger *logrus.Logger
@@ -56,6 +57,21 @@ func IgnoreErrors(errors ...interface{}) {
 	if len(errors) > 0 {
 		return
 	}
+}
+
+func LogErrors(errors ...interface{}) {
+	logger := GetLogger(nil)
+	for i := range errors {
+		if v, ok := errors[i].(error); ok {
+			logger.Error(v)
+			debug.PrintStack()
+		}
+	}
+}
+
+func stack() string {
+	var buf [2 << 10]byte
+	return string(buf[:runtime.Stack(buf[:], true)])
 }
 
 func newLogger(c interface{}) *logrus.Logger {

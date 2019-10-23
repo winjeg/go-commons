@@ -1,6 +1,7 @@
 package log
 
 import (
+	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -64,4 +65,22 @@ func TestNewLogger(t *testing.T) {
 	}
 	l := NewLogger(settings)
 	l.Info("hello, world!")
+	IgnoreErrors()
+
+	testErr()
+}
+
+func testErr() {
+	someErr()
+}
+
+func someErr() {
+	LogErrors(errors.New("abc"))
+}
+
+func BenchmarkLogErrors(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		LogErrors(errors.New("hello"))
+	}
+	b.ReportAllocs()
 }
