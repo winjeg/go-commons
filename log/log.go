@@ -16,7 +16,7 @@ var (
 	//default settings
 	settings = Settings{
 		Output:       "std",
-		Format:       "text",
+		Format:       "colored",
 		Level:        "info",
 		ReportCaller: true,
 	}
