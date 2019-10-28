@@ -8,12 +8,12 @@ import (
 )
 
 type RotateFileConfig struct {
-	Filename   string
-	MaxSize    int
-	MaxBackups int
-	MaxAge     int
-	Level      logrus.Level
-	Formatter  logrus.Formatter
+	Filename   string           `yaml:"file-name"`
+	MaxSize    int              `yaml:"max-size"`
+	MaxBackups int              `yaml:"max-backups"`
+	MaxAge     int              `yaml:"max-age"`
+	Level      logrus.Level     `yaml:"level"`
+	Formatter  logrus.Formatter `yaml:"formatter"`
 }
 
 type RotateFileHook struct {

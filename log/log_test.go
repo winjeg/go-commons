@@ -66,7 +66,6 @@ func TestNewLogger(t *testing.T) {
 	l := NewLogger(settings)
 	l.Info("hello, world!")
 	IgnoreErrors()
-
 	testErr()
 }
 
@@ -75,12 +74,12 @@ func testErr() {
 }
 
 func someErr() {
-	LogErrors(errors.New("abc"))
+	Errors(errors.New("abc"))
 }
 
 func BenchmarkLogErrors(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		LogErrors(errors.New("hello"))
+		Errors(errors.New("hello"))
 	}
 	b.ReportAllocs()
 }

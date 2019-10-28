@@ -4,7 +4,6 @@ require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20190915194858-d3ddacdb130f // indirect
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
-	github.com/palantir/stacktrace v0.0.0-20161112013806-78658fd2d177
 	github.com/satori/go.uuid v1.2.0
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644
 	github.com/sirupsen/logrus v1.4.2

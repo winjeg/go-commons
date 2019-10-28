@@ -59,19 +59,14 @@ func IgnoreErrors(errors ...interface{}) {
 	}
 }
 
-func LogErrors(errors ...interface{}) {
+func Errors(errors ...interface{}) {
 	logger := GetLogger(nil)
 	for i := range errors {
 		if v, ok := errors[i].(error); ok {
 			logger.Error(v)
-			debug.PrintStack()
 		}
+		debug.PrintStack()
 	}
-}
-
-func stack() string {
-	var buf [2 << 10]byte
-	return string(buf[:runtime.Stack(buf[:], true)])
 }
 
 func newLogger(c interface{}) *logrus.Logger {
@@ -79,7 +74,6 @@ func newLogger(c interface{}) *logrus.Logger {
 	if c != nil {
 		conf = getConf(c)
 	}
-
 	l := logrus.New()
 	// for windows no color output
 	if windows() && strings.EqualFold(conf.Format, "colored") {
