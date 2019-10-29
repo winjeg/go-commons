@@ -5,13 +5,12 @@ package conf
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	"github.com/winjeg/go-commons/log"
 )
 
 // get parent directory of the current directory
@@ -28,8 +27,8 @@ func getConfigFileFromSrc(fileName, srcDir string) *os.File {
 	dir := path.Dir(srcDir)
 	f, err := os.Open(path.Join(dir, fileName))
 	// change to the dir that contains the source code
-	ercd := os.Chdir(dir)
-	logError(ercd)
+	cdErr := os.Chdir(dir)
+	logError(cdErr)
 
 	reachRoot := false
 	for err != nil {
@@ -63,9 +62,8 @@ func getConfigFileFromSrc(fileName, srcDir string) *os.File {
 }
 
 func logError(err error) {
-	logger := log.GetLogger(nil)
 	if err != nil {
-		logger.Error("error changing dir...", err)
+		log.Println("error changing dir...", err)
 	}
 }
 
