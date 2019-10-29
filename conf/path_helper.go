@@ -11,23 +11,27 @@ import (
 	logger "github.com/winjeg/go-commons/log"
 )
 
+func getPathSep() string {
+	pathSep := "/"
+	if strings.EqualFold(runtime.GOOS, "windows") {
+		pathSep = `\`
+	}
+	return pathSep
+}
+
 // get parent directory of the current directory
 func getParentDirectory(directory string) string {
-	if strings.LastIndex(directory, "/") == len(directory)-1 {
+	if strings.LastIndex(directory, getPathSep()) == len(directory)-1 {
 		directory = directory[:len(directory)-1]
 	}
 	runes := []rune(directory)
-	return string(runes[0:strings.LastIndex(directory, "/")])
+	return string(runes[0:strings.LastIndex(directory, getPathSep())])
 }
 
 // get config file from where the source code lies
 func getFileDirFromSrc(fileName, srcDir string) string {
 	dir, _ := filepath.Abs(srcDir)
-	pathSep := "/"
-	if strings.EqualFold(runtime.GOOS, "windows") {
-		pathSep = `\`
-	}
-	lastIdx := strings.LastIndex(dir, pathSep)
+	lastIdx := strings.LastIndex(dir, getPathSep())
 	if lastIdx >= 0 {
 		dir = dir[:lastIdx]
 	}
