@@ -31,10 +31,14 @@ func getParentDirectory(directory string) string {
 // get config file from where the source code lies
 func getFileDirFromSrc(fileName, srcDir string) string {
 	dir, _ := filepath.Abs(srcDir)
-	lastIdx := strings.LastIndex(dir, getPathSep())
-	if lastIdx >= 0 {
-		dir = dir[:lastIdx]
+	tmpFile, _ := os.Stat(dir)
+	if tmpFile != nil && !tmpFile.IsDir() {
+		lastIdx := strings.LastIndex(dir, getPathSep())
+		if lastIdx >= 0 {
+			dir = dir[:lastIdx]
+		}
 	}
+
 	f, err := os.Open(path.Join(dir, fileName))
 	if err == nil {
 		logger.Errors(f.Close())
