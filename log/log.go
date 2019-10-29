@@ -20,6 +20,9 @@ var (
 		Format:       "colored",
 		Level:        "info",
 		ReportCaller: false,
+		FileConfig: RotateFileConfig{
+			Enable: false,
+		},
 	}
 	lock   sync.Mutex
 	logger *logrus.Logger
@@ -31,11 +34,11 @@ var (
 type LogSettings = Settings
 
 type Settings struct {
-	Output       string            `json:"output" yaml:"output" ini:"output"`
-	Format       string            `json:"format" yaml:"format" ini:"format"`
-	Level        string            `json:"level" yaml:"level" ini:"level"`
-	ReportCaller bool              `json:"reportCaller" yaml:"report-caller" ini:"report-caller"`
-	FileConfig   *RotateFileConfig `json:"fileConfig" yaml:"file-config" ini:"file-config"`
+	Output       string           `json:"output" yaml:"output" ini:"output"`
+	Format       string           `json:"format" yaml:"format" ini:"format"`
+	Level        string           `json:"level" yaml:"level" ini:"level"`
+	ReportCaller bool             `json:"reportCaller" yaml:"report-caller" ini:"report-caller"`
+	FileConfig   RotateFileConfig `json:"fileConfig" yaml:"file-config" ini:"file-config"`
 }
 
 // export GetLogger
@@ -79,7 +82,6 @@ func newLogger(c interface{}) *logrus.Logger {
 	if c != nil {
 		conf = getConf(c)
 	}
-
 	l := logrus.New()
 	// for windows no color output
 	if windows() && strings.EqualFold(conf.Format, "colored") {
@@ -90,8 +92,8 @@ func newLogger(c interface{}) *logrus.Logger {
 	l.SetFormatter(getFormatter(conf))
 	l.SetLevel(getLogLevel(conf))
 	l.SetReportCaller(conf.ReportCaller)
-	if conf.FileConfig != nil {
-		hook, err := NewRotateFileHook(*conf.FileConfig)
+	if conf.FileConfig.Enable {
+		hook, err := NewRotateFileHook(conf.FileConfig)
 		if err == nil {
 			l.AddHook(hook)
 		}
@@ -136,43 +138,11 @@ func windows() bool {
 
 // get log level, default level info
 func getLogLevel(settings Settings) logrus.Level {
-	switch strings.ToLower(settings.Level) {
-	case "trace":
-		return logrus.TraceLevel
-	case "debug":
-		return logrus.DebugLevel
-	case "info":
-		return logrus.InfoLevel
-	case "warn":
-		return logrus.WarnLevel
-	case "error":
-		return logrus.ErrorLevel
-	case "fatal":
-		return logrus.FatalLevel
-	case "panic":
-		return logrus.PanicLevel
-	default:
-		return logrus.InfoLevel
-	}
+	return convertLogLevel(settings.Level)
 }
 
 func getFormatter(c Settings) logrus.Formatter {
-	switch c.Format {
-	case "colored":
-		return &logrus.TextFormatter{
-			ForceColors:   true,
-			FullTimestamp: true,
-		}
-	case "text":
-		return &logrus.TextFormatter{}
-	case "json":
-		return &logrus.JSONFormatter{}
-	default:
-		return &logrus.TextFormatter{
-			FullTimestamp: true,
-			ForceColors:   true,
-		}
-	}
+	return convertFormatter(c.Format)
 }
 
 func getOutput(c Settings) io.Writer {
