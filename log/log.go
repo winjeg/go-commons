@@ -67,8 +67,8 @@ func Errors(errors ...interface{}) {
 	for i := range errors {
 		if v, ok := errors[i].(error); ok {
 			logger.Error(v)
+			debug.PrintStack()
 		}
-		debug.PrintStack()
 	}
 }
 
