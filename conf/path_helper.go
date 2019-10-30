@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	logger "github.com/winjeg/go-commons/log"
 )
 
 func getPathSep() string {
@@ -41,7 +39,7 @@ func getFileDirFromSrc(fileName, srcDir string) string {
 
 	f, err := os.Open(path.Join(dir, fileName))
 	if err == nil {
-		logger.Errors(f.Close())
+		logError(f.Close())
 		return dir
 	}
 	// change to the dir that contains the source code
@@ -78,7 +76,7 @@ func getFileDirFromSrc(fileName, srcDir string) string {
 	defer func() {
 		if f != nil {
 			err := f.Close()
-			logger.Errors(err)
+			logError(err)
 		}
 	}()
 	// return found file

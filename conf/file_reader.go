@@ -4,7 +4,6 @@
 package conf
 
 import (
-	"github.com/winjeg/go-commons/log"
 	"io/ioutil"
 	"os"
 	"path"
@@ -24,7 +23,7 @@ func ReadConfigFile(fileName, srcFile string) []byte {
 	d, err := ioutil.ReadAll(f)
 	defer func() {
 		if f != nil {
-			log.Errors(f.Close())
+			logError(f.Close())
 		}
 	}()
 	if err != nil {
