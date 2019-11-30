@@ -17,8 +17,9 @@ func TestLoadFile(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-const propText = `ip=127.0.0.1
-username=winjeg
+const propText = `
+ip=127.0.0.1
+username=Winjeg Gong
 result=success
 # this is a comment`
 

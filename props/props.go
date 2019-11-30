@@ -3,6 +3,7 @@ package props
 import (
 	"bufio"
 	"fmt"
+	"github.com/winjeg/go-commons/log"
 	"io"
 	"os"
 	"regexp"
@@ -51,7 +52,9 @@ func LoadFile(fileName string) (Properties, error) {
 	if err != nil {
 		return nil, err
 	}
-	return parseFile(file)
+	result, pErr := parseFile(file)
+	log.Errors(file.Close())
+	return result, pErr
 }
 
 // export FromString
