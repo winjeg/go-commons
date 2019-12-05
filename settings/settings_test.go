@@ -25,6 +25,7 @@ func TestContains(t *testing.T) {
 
 func TestSettings(t *testing.T) {
 	dbConn := getDb()
+	intSql("settings")
 	err := Init(dbConn)
 	assert.Nil(t, err)
 	SetVar("a", "b")
