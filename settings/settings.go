@@ -65,6 +65,7 @@ func InitV3(dbConn *sql.DB, autoGenerateId, pg bool, tableName string) error {
 }
 
 func Init(dbConn *sql.DB) error {
+	intSql("settings")
 	if dbConn == nil {
 		return errors.New("db connection should not be nil")
 	}
