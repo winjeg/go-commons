@@ -25,7 +25,7 @@ result=success
 
 func TestFromString(t *testing.T) {
 	p := FromString(propText)
-	assert.Equal(t, "winjeg", p["username"])
+	assert.Equal(t, "Winjeg Gong", p["username"])
 	q := FromString("")
 	assert.Empty(t, q)
 	x := FromString("tom")

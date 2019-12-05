@@ -7,15 +7,33 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/winjeg/go-commons/cache"
 	"strings"
-	"sync"
 
+	"github.com/winjeg/go-commons/cache"
 	"github.com/winjeg/go-commons/log"
 	"github.com/winjeg/go-commons/uid"
 )
 
-var getSql, getSqlPg, updateSql, updateSqlPg, existSql, existSqlPg, addSql, addSqlPg, addSqlWithId, addSqlWithIdPg, deleteVarSql, deleteVarSqlPg, settingsSql, settingVar, createSettingsTableSql, descSettingsSql, nameCol, valCol string
+var (
+	getSql                 string
+	getSqlPg               string
+	updateSql              string
+	updateSqlPg            string
+	existSql               string
+	existSqlPg             string
+	addSql                 string
+	addSqlPg               string
+	addSqlWithId           string
+	addSqlWithIdPg         string
+	deleteVarSql           string
+	deleteVarSqlPg         string
+	settingsSql            string
+	settingVar             string
+	createSettingsTableSql string
+	descSettingsSql        string
+	nameCol                string
+	valCol                 string
+)
 
 var (
 	logger           = log.GetLogger(nil)
@@ -72,9 +90,6 @@ func Init(dbConn *sql.DB) error {
 	if db != nil {
 		return errors.New("already initialized")
 	}
-	var lock sync.Mutex
-	lock.Lock()
-	defer lock.Unlock()
 
 	// if table not exists create the table for them
 	if !tableExists(dbConn) {
@@ -124,20 +139,14 @@ func GetVar(name string) string {
 				return ""
 			}
 		}
-
-		var lock sync.Mutex
-		lock.Lock()
 		cache.Set(name, x, 1000*60*30)
-		lock.Unlock()
+
 		return x
 	}
 }
 
 // set variable and update cache
 func SetVar(name, value string) {
-	var lock sync.Mutex
-	lock.Lock()
-	defer lock.Unlock()
 	cache.Set(name, value, 1000*60*30)
 	var row *sql.Row
 	if postgres {
@@ -205,10 +214,7 @@ func SetVar(name, value string) {
 }
 
 func DelVar(name string) {
-	var lock sync.Mutex
-	lock.Lock()
-	defer lock.Unlock()
-	cache.Set(name, nil, 100)
+	cache.Set(name, nil, 0)
 	if postgres {
 		stmt, err := db.Prepare(deleteVarSqlPg)
 		if err != nil {
