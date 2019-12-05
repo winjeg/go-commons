@@ -7,7 +7,13 @@ go:
 compiler:
 - gcc
 
-before_install: GO111MODULE=on go mod vendor
+services:
+  - mysql
+
+before_install:
+  - GO111MODULE=on go mod vendor
+  - mysql -e "CREATE DATABASE IF NOT EXISTS cloudb;"
+  - sudo mysql -e "grant all privileges on cloudb.* to testuser@'%' identified by '123456';FLUSH PRIVILEGES;"
 
 script:
 - go build .
