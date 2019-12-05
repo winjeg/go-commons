@@ -18,11 +18,10 @@ import (
 var getSql, getSqlPg, updateSql, updateSqlPg, existSql, existSqlPg, addSql, addSqlPg, addSqlWithId, addSqlWithIdPg, deleteVarSql, deleteVarSqlPg, settingsSql, settingVar, createSettingsTableSql, descSettingsSql, nameCol, valCol string
 
 var (
-	settingsMap         = map[string]string{}
-	logger              = log.GetLogger(nil)
-	db          *sql.DB = nil
-	withId              = false
-	postgres            = false
+	logger           = log.GetLogger(nil)
+	db       *sql.DB = nil
+	withId           = false
+	postgres         = false
 )
 
 // generate primary key, with this function
@@ -127,7 +126,6 @@ func GetVar(name string) string {
 
 		var lock sync.Mutex
 		lock.Lock()
-		//settingsMap[name] = x
 		cache.Set(name, x, 1000*60*30)
 		lock.Unlock()
 		return x
@@ -204,7 +202,6 @@ func DelVar(name string) {
 	var lock sync.Mutex
 	lock.Lock()
 	defer lock.Unlock()
-	delete(settingsMap, name)
 	cache.Set(name, nil, 100)
 	var err error
 	if postgres {
