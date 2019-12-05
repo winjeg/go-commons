@@ -147,7 +147,6 @@ func SetVar(name, value string) {
 
 	exists := 0
 	if err := row.Scan(&exists); err == nil && exists == 0 {
-		var err error
 		if withId {
 			id := uid.NextID()
 			if postgres {
@@ -156,9 +155,15 @@ func SetVar(name, value string) {
 					logger.Error(err)
 				}
 				defer stmt.Close()
-				_, err = stmt.Exec(id, name, value)
+				_, execErr := stmt.Exec(id, name, value)
+				if execErr != nil {
+					logger.Error(err)
+				}
 			} else {
-				_, err = db.Exec(addSqlWithId, id, name, value)
+				_, execErr := db.Exec(addSqlWithId, id, name, value)
+				if execErr != nil {
+					logger.Error(err)
+				}
 			}
 
 		} else {
@@ -203,7 +208,6 @@ func DelVar(name string) {
 	lock.Lock()
 	defer lock.Unlock()
 	cache.Set(name, nil, 100)
-	var err error
 	if postgres {
 		stmt, err := db.Prepare(deleteVarSqlPg)
 		if err != nil {
@@ -211,12 +215,15 @@ func DelVar(name string) {
 			return
 		}
 		defer stmt.Close()
-		_, err = stmt.Exec(name)
+		_, execErr := stmt.Exec(name)
+		if execErr != nil {
+			logger.Error(execErr)
+		}
 	} else {
-		_, err = db.Exec(deleteVarSql, name)
-	}
-	if err != nil {
-		logger.Error(err)
+		_, err := db.Exec(deleteVarSql, name)
+		if err != nil {
+			logger.Error(err)
+		}
 	}
 }
 
