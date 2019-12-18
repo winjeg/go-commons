@@ -14,7 +14,12 @@ import (
 
 var (
 	// 3 seconds timeout
-	httpClient = &http.Client{Timeout: time.Second * 30}
+	httpClient      = &http.Client{Timeout: time.Second * 30}
+	jsonContentType = []string{"application/json"}
+)
+
+const (
+	contentTypeHeaderName = "content-type"
 )
 
 // export GetWithParams
@@ -91,7 +96,7 @@ func Put(url, content string) (string, error) {
 	logger := log.GetLogger(nil)
 	req, err := http.NewRequest(http.MethodPut, url, strings.NewReader(content))
 	req.Header = http.Header{
-		"content-type": {"application/json"},
+		contentTypeHeaderName: jsonContentType,
 	}
 	if err != nil {
 		return "", err
@@ -117,7 +122,7 @@ func Delete(url, content string) (string, error) {
 	logger := log.GetLogger(nil)
 	req, err := http.NewRequest(http.MethodDelete, url, strings.NewReader(content))
 	req.Header = http.Header{
-		"content-type": {"application/json"},
+		contentTypeHeaderName: jsonContentType,
 	}
 	if err != nil {
 		return "", err
@@ -136,12 +141,36 @@ func Delete(url, content string) (string, error) {
 	return string(data), err
 }
 
+// export Delete
+// delete request by url
+// content type is application/json
+func DoRequest(method, url, content string, header http.Header) (string, error) {
+	logger := log.GetLogger(nil)
+	req, err := http.NewRequest(method, url, strings.NewReader(content))
+	req.Header = header
+	if err != nil {
+		return "", err
+	}
+	req.Close = true
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		logger.Errorf("%v\n", err)
+		return "", err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
+	}
+	data, err := ioutil.ReadAll(resp.Body)
+	defer safeClose(resp)
+	return string(data), err
+}
+
 func safeClose(resp *http.Response) {
 	logger := log.GetLogger(nil)
 	if resp != nil && !resp.Close {
 		err := resp.Body.Close()
 		if err != nil {
-			logger.Errorf("error close response body:%v", err)
+			logger.Errorf("error close response body:%v\n", err)
 		}
 	}
 }
