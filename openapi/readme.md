@@ -1,11 +1,6 @@
 # a tool to provide third-party apis
-[![Build Status](https://travis-ci.org/winjeg/openapi.svg?branch=master)](https://travis-ci.org/winjeg/openapi)
-[![Go Report Card](https://goreportcard.com/badge/github.com/winjeg/openapi)](https://goreportcard.com/report/github.com/winjeg/openapi)
-[![GolangCI](https://golangci.com/badges/github.com/winjeg/go-commons.svg)](https://golangci.com/r/github.com/winjeg/openapi)
-[![codecov](https://codecov.io/gh/winjeg/openapi/branch/master/graph/badge.svg)](https://codecov.io/gh/winjeg/openapi)
 
-a common tool for providing api to third-party users
-
+a common tool for providing api to third-party users  
 theoretically the tool is compatible with all kinds of web framework
 and `iris` and `gin` is the recommend web framework.
 
@@ -34,10 +29,9 @@ type SecretKeeper interface {
 }
 ```
 
-
 ### using it in your web framework
 create a middle ware for some web framework
-```go 
+```go
 // create a middle ware for iris
 func OpenApiHandler(ctx iris.Context) {
 
@@ -65,7 +59,6 @@ func OpenApiHandler(ctx iris.Context) {
 		return
 	}
 }
-
 
 ```
 use it on some kind of api groups

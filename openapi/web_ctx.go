@@ -2,7 +2,6 @@ package openapi
 
 import (
 	"errors"
-	"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -29,6 +28,8 @@ func SignHeader(s bool) {
 }
 
 // CheckValid to check if the request is valid  from the signing key
+// can't do the judge for you automatically, cause you may want to return something
+// that is defined by yourself, and the call back form is not quite certain.
 func CheckValid(req *http.Request, keeper SecretKeeper) (bool, error) {
 	if req == nil {
 		return false, errors.New("illegal request")
@@ -58,15 +59,6 @@ func CheckValid(req *http.Request, keeper SecretKeeper) (bool, error) {
 		return result, nil
 	}
 	return result, errors.New("error verifying")
-}
-
-func Do(req *http.Request, keeper SecretKeeper, successFun, failFunc func()) {
-	if r, err := CheckValid(req, keeper); r {
-		successFun()
-	} else {
-		log.Printf("%v\n", err)
-		failFunc()
-	}
 }
 
 func getParamFromRequest(req *http.Request, param string) string {
