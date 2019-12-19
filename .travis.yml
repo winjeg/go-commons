@@ -1,11 +1,11 @@
 language: go
 
 go:
-- 1.11.x
-- tip
+  - 1.11.x
+  - tip
 
 compiler:
-- gcc
+  - gcc
 
 services:
   - mysql
@@ -14,10 +14,11 @@ before_install:
   - GO111MODULE=on go mod vendor
   - mysql -e "CREATE DATABASE IF NOT EXISTS cloudb;"
   - sudo mysql -e "grant all privileges on cloudb.* to testuser@'%' identified by '123456';FLUSH PRIVILEGES;"
+  - sudo mysql -e "use cloudb; CREATE TABLE `app` ( `app_key` varchar(32) NOT NULL, `app_secret` varchar(128) NOT NULL, `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`app_key`)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
 script:
-- go build .
-- go test ./...  -race -coverprofile=coverage.txt -covermode=atomic
+  - go build .
+  - go test ./...  -race -coverprofile=coverage.txt -covermode=atomic
 
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)

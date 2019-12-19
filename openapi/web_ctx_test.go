@@ -13,8 +13,7 @@ func TestCheckValid(t *testing.T) {
 	SignHeader(false)
 	time := time.Now().UnixNano() / 1e6
 	req, _ := http.NewRequest(http.MethodGet,
-		fmt.Sprintf("http://localhost:8080?time=%d&app_key=thekey&id=123", time),
-		nil)
+		fmt.Sprintf("http://localhost:8080?time=%d&app_key=thekey&id=123", time), nil)
 	pairs := getPairs(req)
 	sec, err := sqlKeeper.GetSecret("thekey")
 	assert.Nil(t, err)
