@@ -38,11 +38,8 @@ func TestSqlSecretKeeper_GetSecret(t *testing.T) {
 }
 
 func TestSqlSecretKeeper_GeneratePair(t *testing.T) {
-	sqlKeeper.TableName = "abc"
-	r := sqlKeeper.GeneratePair()
-	assert.Nil(t, r)
 	sqlKeeper.TableName = "app"
-	r = sqlKeeper.GeneratePair()
+	r := sqlKeeper.GeneratePair()
 	assert.NotNil(t, r)
 }
 
