@@ -143,8 +143,8 @@ func test() {
 ```
 
 ## str
-an unique id generator to generate unique id from
 
+some utilities for str operation
 ```go
 
 func TestUUID(t *testing.T) {
@@ -154,6 +154,9 @@ func TestUUID(t *testing.T) {
 }
 
 ```
+## uid  
+both string unique id and numeric unique id is supported.
+
 
 ## properties
 read properties from string or from file,and convert a map to a property file
@@ -167,3 +170,9 @@ name=tom
 ... to be planned
 
 
+## how to contribute 
+I am not rule follower, so if you want to use the project, or you want to write some code for it, just fork it and make pull requests.  
+Only one thing needs to be cared, the version problem. You need to test it before tagging it.  
+- Small changes will happen on the third digit of the version(tag).
+- Medium changes will happen on the second digit of the version(tag).
+- Big changes will happen on the first digit of the version(tag).
