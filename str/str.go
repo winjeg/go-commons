@@ -128,6 +128,8 @@ func TrimDot(str string) string {
 }
 
 // trim something down, not a cut set. which is much different from strings.Trim
+// trim space first then the trim param set
+// it only trims the first occurrences of the string to be trimmed
 func Trim(str, trim string) string {
 	str = strings.TrimSpace(str)
 	if strings.EqualFold(str[len(str)-len(trim):], trim) {

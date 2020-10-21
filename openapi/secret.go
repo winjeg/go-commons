@@ -8,3 +8,4 @@ type SecretKeeper interface {
 const (
 	EmptyString = ""
 )
+
