@@ -13,10 +13,10 @@ import (
 // then where the source code lies, or it's parent directory recursively
 func ReadConfigFile(fileName, srcFile string) []byte {
 	dir := FindDirOfFile(fileName, fileName)
-	if len(dir) ==0  {
+	if len(dir) == 0 {
 		return nil
 	}
-	f, openErr :=  os.Open(path.Join(dir, fileName))
+	f, openErr := os.Open(path.Join(dir, fileName))
 	if openErr != nil {
 		return nil
 	}

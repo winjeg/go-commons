@@ -38,7 +38,7 @@ func DefaultClient(key, sec string) *Client {
 }
 
 func (c *Client) Get(uri string, headers ...http.Header) (string, error) {
-	return c.requestWithHeader(http.MethodGet, uri, "",  headers...)
+	return c.requestWithHeader(http.MethodGet, uri, "", headers...)
 }
 
 func (c *Client) Post(uri, body string, headers ...http.Header) (string, error) {
@@ -46,7 +46,7 @@ func (c *Client) Post(uri, body string, headers ...http.Header) (string, error) 
 }
 
 func (c *Client) Delete(uri, body string, headers ...http.Header) (string, error) {
-	return c.requestWithHeader(http.MethodDelete, uri, body,  headers...)
+	return c.requestWithHeader(http.MethodDelete, uri, body, headers...)
 }
 
 func (c *Client) Put(uri, body string, headers ...http.Header) (string, error) {
@@ -58,7 +58,7 @@ func (c *Client) requestWithHeader(method, url, body string, headers ...http.Hea
 	var header http.Header
 	if len(headers) > 0 {
 		header = headers[0]
-		if len(body) >  0 {
+		if len(body) > 0 {
 			if header == nil {
 				header = make(map[string][]string, defaultSize)
 			}

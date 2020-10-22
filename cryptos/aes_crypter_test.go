@@ -25,5 +25,13 @@ func TestAesDecrypt(t *testing.T) {
 
 func BenchmarkAesDecrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
+		encrypted, err := AesEncrypt(text, key)
+		if err != nil {
+			panic(err)
+		}
+		_, err2 := AesDecrypt(string(encrypted), key)
+		if err2 != nil {
+			panic(err2)
+		}
 	}
 }
