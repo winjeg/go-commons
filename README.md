@@ -16,6 +16,7 @@ The recommended position of the config file is under the root of your source cod
 When you deploy executables the config file should be along with the executables.
 
 supports both yaml and ini config files
+
 ### examples
 
 ```go
