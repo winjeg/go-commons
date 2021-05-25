@@ -111,6 +111,17 @@ func IsBlank(str string) bool {
 	return len(strings.TrimSpace(str)) == 0
 }
 
+// export IsAllBlank
+// judge if all strings is blank
+func IsAllBlank(strs ...string) bool {
+	for _, str := range strs {
+		if !IsBlank(str) {
+			return false
+		}
+	}
+	return true
+}
+
 // export ReplaceAll
 // replace all old str to new str for a string
 func ReplaceAll(src, old, new string) string {

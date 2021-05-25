@@ -94,3 +94,12 @@ func TestJoin(t *testing.T) {
 	result := JoinIfNotEmpty(",", "a", "", "c")
 	assert.Equal(t, result, "a,c")
 }
+
+func TestIsAllBlank(t *testing.T) {
+
+	assert.True(t, IsAllBlank(""))
+	assert.True(t, IsAllBlank())
+	assert.True(t, IsAllBlank("", "     "))
+	assert.False(t, IsAllBlank("", "     ", "13"))
+
+}
