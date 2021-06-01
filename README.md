@@ -97,6 +97,7 @@ import (
  "github.com/winjeg/go-commons/log"
 )
 
+
 var logger = log.GetLogger(nil)
 func loggerTest() {
         // Debug, Warn, Trace, Error
@@ -118,6 +119,10 @@ func TestNewLogger(t *testing.T) {
 	l.Info("hello, world!")
 }
 
+
+// want to read log file config ?
+var logger = log.GetLogger(config)
+// this config should not be a pointer, it should be a struct contains the LogSettings member
 
 ```
 

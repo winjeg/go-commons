@@ -2,8 +2,8 @@ package cryptos
 
 import "encoding/base64"
 
-/// standard base64 encoding
-/// using aes as the basic algorithm for crypting
+// Base64Encrypt standard base64 encoding
+// using aes as the basic algorithm for encrypting
 func Base64Encrypt(data, key string) (string, error) {
 	d, err := AesEncrypt(data, key)
 	if err != nil {
@@ -12,8 +12,8 @@ func Base64Encrypt(data, key string) (string, error) {
 	return base64.StdEncoding.EncodeToString(d), nil
 }
 
-/// standard base64 decoding
-/// using aes as basic algorithm
+// Base64Decrypt  standard base64 decoding
+// using aes as basic algorithm
 func Base64Decrypt(data, key string) (string, error) {
 	decodeBytes, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
