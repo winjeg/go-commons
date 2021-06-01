@@ -1,9 +1,10 @@
 package log
 
 import (
-	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
+
+	"errors"
 	"testing"
 )
 

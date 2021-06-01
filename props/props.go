@@ -3,11 +3,12 @@ package props
 import (
 	"bufio"
 	"fmt"
-	"github.com/winjeg/go-commons/log"
 	"io"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/winjeg/go-commons/log"
 )
 
 var (

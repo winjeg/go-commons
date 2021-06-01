@@ -1,8 +1,9 @@
 package cryptos
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
+
+	"fmt"
 	"testing"
 )
 
