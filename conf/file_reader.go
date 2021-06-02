@@ -12,7 +12,7 @@ import (
 // ReadConfigFile  read config file first from where the executable file lies
 // then where the source code lies, or it's parent directory recursively
 func ReadConfigFile(fileName, srcFile string) []byte {
-	dir := FindDirOfFile(fileName, fileName)
+	dir := FindDirOfFile(fileName, srcFile)
 	if len(dir) == 0 {
 		return nil
 	}
