@@ -96,10 +96,21 @@ func TestJoin(t *testing.T) {
 }
 
 func TestIsAllBlank(t *testing.T) {
-
 	assert.True(t, IsAllBlank(""))
 	assert.True(t, IsAllBlank())
 	assert.True(t, IsAllBlank("", "     "))
 	assert.False(t, IsAllBlank("", "     ", "13"))
-
+	assert.True(t, IsNotBlank(" _"))
+	assert.False(t, IsNoneBlank())
+	assert.False(t, IsNoneBlank(" "))
+	assert.False(t, IsNoneBlank(" ", ""))
+	assert.True(t, IsNoneBlank(" a", "1"))
+	assert.True(t, HasAnyBlank())
+	assert.True(t, HasAnyBlank(""))
+	assert.True(t, HasAnyBlank("", "a"))
+	assert.False(t, HasAnyBlank("c", "a"))
+	assert.True(t, NotAllBlank("c", "a"))
+	assert.True(t, NotAllBlank("", "a"))
+	assert.False(t, NotAllBlank("", " "))
+	assert.False(t, NotAllBlank())
 }
