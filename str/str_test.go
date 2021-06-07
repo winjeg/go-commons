@@ -113,4 +113,10 @@ func TestIsAllBlank(t *testing.T) {
 	assert.True(t, NotAllBlank("", "a"))
 	assert.False(t, NotAllBlank("", " "))
 	assert.False(t, NotAllBlank())
+	assert.Equal(t, JoinStr("", "."), ".")
+	assert.Equal(t, JoinStr(""), "")
+	assert.Equal(t, JoinStr(), "")
+	assert.Equal(t, JoinStr("a"), "a")
+	assert.Equal(t, Repeat("a", 1), "a")
+	assert.Equal(t, Repeat("a", 3), "aaa")
 }

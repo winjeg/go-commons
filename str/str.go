@@ -1,6 +1,7 @@
 package str
 
 import (
+	"bytes"
 	"strconv"
 	"strings"
 	"unsafe"
@@ -177,6 +178,32 @@ func JoinIfNotEmpty(sep string, args ...string) string {
 		}
 	}
 	return result
+}
+
+// export Repeat
+// repeat the string with given times
+func Repeat(str string, n int) string {
+	if len(str) == 0 || n < 2 {
+		return str
+	}
+	var buffer bytes.Buffer
+	for i := 0; i < n; i++ {
+		buffer.WriteString(str)
+	}
+	return buffer.String()
+}
+
+// export JoinStr
+// join given strings together
+func JoinStr(strArr ...string) string {
+	if len(strArr) == 0 {
+		return ""
+	}
+	var buffer bytes.Buffer
+	for _, v := range strArr {
+		buffer.WriteString(v)
+	}
+	return buffer.String()
 }
 
 // ToBytes convert a string to a byte
