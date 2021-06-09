@@ -78,8 +78,6 @@ func RandomStrWithSpecialChars(length int) string {
 	return string(RandStr(length, KindAllWithSpecial))
 }
 
-
-
 // export UUID
 // is to generate unique ids
 func UUID() string {
