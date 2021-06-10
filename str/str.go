@@ -113,8 +113,8 @@ func IsBlank(str string) bool {
 
 // export IsAllBlank
 // judge if all strings is blank
-func IsAllBlank(strings ...string) bool {
-	for _, str := range strings {
+func IsAllBlank(strArr ...string) bool {
+	for _, str := range strArr {
 		if !IsBlank(str) {
 			return false
 		}
@@ -124,11 +124,11 @@ func IsAllBlank(strings ...string) bool {
 
 // export IsAnyBlank
 // judge if any strings is blank
-func IsAnyBlank(strings ...string) bool {
-	if strings == nil {
+func IsAnyBlank(strArr ...string) bool {
+	if strArr == nil {
 		return true
 	}
-	for _, str := range strings {
+	for _, str := range strArr {
 		if IsBlank(str) {
 			return true
 		}
