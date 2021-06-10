@@ -103,3 +103,17 @@ func TestIsAllBlank(t *testing.T) {
 	assert.False(t, IsAllBlank("", "     ", "13"))
 
 }
+
+func TestIsAnyBlank(t *testing.T) {
+
+	assert.True(t, IsAnyBlank(""))
+	assert.True(t, IsAnyBlank())
+	assert.True(t, IsAnyBlank("", "     "))
+	assert.True(t, IsAnyBlank("", "1"))
+	assert.True(t, IsAnyBlank("1", "     "))
+	assert.False(t, IsAnyBlank("1", "2"))
+	assert.True(t, IsAnyBlank("", "     ", "13"))
+	assert.True(t, IsAnyBlank("123", "     ", "13"))
+	assert.False(t, IsAnyBlank("123", "1", "13"))
+
+}

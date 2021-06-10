@@ -113,13 +113,27 @@ func IsBlank(str string) bool {
 
 // export IsAllBlank
 // judge if all strings is blank
-func IsAllBlank(strs ...string) bool {
-	for _, str := range strs {
+func IsAllBlank(strings ...string) bool {
+	for _, str := range strings {
 		if !IsBlank(str) {
 			return false
 		}
 	}
 	return true
+}
+
+// export IsAnyBlank
+// judge if any strings is blank
+func IsAnyBlank(strings ...string) bool {
+	if strings == nil {
+		return true
+	}
+	for _, str := range strings {
+		if IsBlank(str) {
+			return true
+		}
+	}
+	return false
 }
 
 // export ReplaceAll
