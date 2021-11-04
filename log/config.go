@@ -9,13 +9,14 @@ import (
 )
 
 type RotateFileConfig struct {
-	Enable     bool   `json:"enable" yaml:"enable" ini:"enable"`
-	Filename   string `json:"filename" yaml:"filename" ini:"filename"`
-	MaxSize    int    `json:"maxSize" yaml:"max-size" ini:"max-size"`
-	MaxBackups int    `json:"maxBackups" yaml:"max-backups" ini:"max-backups"`
-	MaxAge     int    `json:"maxAge" yaml:"max-age" ini:"max-age"`
-	Level      string `json:"level" yaml:"level" ini:"level"`
-	Formatter  string `json:"formatter" yaml:"formatter" ini:"formatter"`
+	Enable          bool   `json:"enable" yaml:"enable" ini:"enable"`
+	Filename        string `json:"filename" yaml:"filename" ini:"filename"`
+	MaxSize         int    `json:"maxSize" yaml:"max-size" ini:"max-size"`
+	MaxBackups      int    `json:"maxBackups" yaml:"max-backups" ini:"max-backups"`
+	MaxAge          int    `json:"maxAge" yaml:"max-age" ini:"max-age"`
+	Level           string `json:"level" yaml:"level" ini:"level"`
+	Formatter       string `json:"formatter" yaml:"formatter" ini:"formatter"`
+	CustomFormatter *logrus.Formatter
 }
 
 type RotateFileHook struct {
@@ -41,7 +42,12 @@ func (hook *RotateFileHook) Levels() []logrus.Level {
 }
 
 func (hook *RotateFileHook) Fire(entry *logrus.Entry) (err error) {
-	formatter := convertFormatter(hook.Config.Formatter)
+	var formatter = convertFormatter(hook.Config.Formatter)
+	if strings.EqualFold(hook.Config.Formatter, customFormatter) {
+		if hook.Config.CustomFormatter != nil {
+			formatter = *hook.Config.CustomFormatter
+		}
+	}
 	b, err := formatter.Format(entry)
 	if err != nil {
 		return err

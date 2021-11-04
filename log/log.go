@@ -28,6 +28,8 @@ var (
 	logger *logrus.Logger
 )
 
+const customFormatter = "custom"
+
 // export Settings
 // supporting ini/yaml/json
 
@@ -39,6 +41,7 @@ type Settings struct {
 	Level        string           `json:"level" yaml:"level" ini:"level"`
 	ReportCaller bool             `json:"reportCaller" yaml:"report-caller" ini:"report-caller"`
 	FileConfig   RotateFileConfig `json:"fileConfig" yaml:"file-config" ini:"file-config"`
+	Formatter    *logrus.Formatter
 }
 
 // export GetLogger
@@ -137,7 +140,13 @@ func getLogLevel(settings Settings) logrus.Level {
 }
 
 func getFormatter(c Settings) logrus.Formatter {
+	if strings.EqualFold(c.Format, customFormatter) {
+		if c.Formatter != nil {
+			return *c.Formatter
+		}
+	}
 	return convertFormatter(c.Format)
+
 }
 
 func getOutput(c Settings) io.Writer {
