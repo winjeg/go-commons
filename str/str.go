@@ -217,3 +217,23 @@ func ToBytes(str string) []byte {
 func FromBytes(data []byte) string {
 	return *(*string)(unsafe.Pointer(&data))
 }
+
+// StartsWith to judge if the given str starts with
+// the part given or not
+func StartsWith(str, part string) bool {
+	if len(part) == 0 {
+		return true
+	}
+	index := strings.Index(str, part)
+	return index == 0
+}
+
+// EndsWith to judge if the given str ends with
+// the part given or not
+func EndsWith(str, part string) bool {
+	if len(part) == 0 {
+		return true
+	}
+	lastIndex := strings.LastIndex(str, part)
+	return len(str) == len(part)+lastIndex
+}

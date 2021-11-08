@@ -18,7 +18,7 @@ type cacheValue struct {
 	Expire time.Time
 }
 
-// get cache value, nil will be returned if if has expired
+// Get cache value, nil will be returned if if has expired
 func (c *cacheValue) Get() interface{} {
 	if c.Expire.After(time.Now()) || c.Expire.Equal(beginTime) {
 		return c.Value
@@ -60,7 +60,7 @@ func (cm *cacheManager) Get(k string) interface{} {
 	}
 }
 
-// expire in milliseconds
+// Put expire in milliseconds
 // if expire time <= 0, then the key never expires
 func (cm *cacheManager) Put(k string, val interface{}, exp int) {
 	cm.mayInit()

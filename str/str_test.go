@@ -120,3 +120,14 @@ func TestIsAllBlank(t *testing.T) {
 	assert.Equal(t, Repeat("a", 1), "a")
 	assert.Equal(t, Repeat("a", 3), "aaa")
 }
+
+func TestStrMatch(t *testing.T) {
+	assert.True(t, StartsWith("abc", "a"))
+	assert.True(t, StartsWith("abc", "abc"))
+	assert.True(t, StartsWith("abc", ""))
+	assert.False(t, StartsWith("abc", "bc"))
+	assert.True(t, EndsWith("abc", "c"))
+	assert.True(t, EndsWith("abc", "abc"))
+	assert.True(t, EndsWith("abc", ""))
+	assert.False(t, EndsWith("abc", "ac"))
+}

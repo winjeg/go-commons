@@ -1,7 +1,7 @@
 package cryptos
 
-/// AES 加解密
-/// 由于AES的规定， key的长度必须是 16, 24, 或者32位
+/// AES encryption and decryption
+/// according to aes' rules, the length of the key is in this range [16, 24, 32]
 
 import (
 	"bytes"
@@ -24,18 +24,9 @@ var (
 	lock   = sync.Mutex{}
 )
 
-func _PKCS5Padding(ciphertext []byte, blockSize int) []byte {
-	padding := blockSize - len(ciphertext)%blockSize
-	padText := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(ciphertext, padText...)
-}
-
-func _PKCS5UnPadding(origData []byte) []byte {
-	length := len(origData)
-	unPadding := int(origData[length-1])
-	return origData[:(length - unPadding)]
-}
-
+// AesEncrypt using aes to encrypt the given data string
+// param: origDataStr the original data to be encrypted
+// param: keyStr the key used to encrypted
 func AesEncrypt(origDataStr, keyStr string) ([]byte, error) {
 	key, origData := []byte(keyStr), []byte(origDataStr)
 	block := getBlock(key)
@@ -48,6 +39,9 @@ func AesEncrypt(origDataStr, keyStr string) ([]byte, error) {
 	return encrypted, nil
 }
 
+// AesDecrypt decrypt the given str using given key
+// param: encryptedStr  the encrypted result
+// param: keyStr 		the key used to encrypt
 func AesDecrypt(encryptedStr, keyStr string) ([]byte, error) {
 	key, encrypted := []byte(keyStr), []byte(encryptedStr)
 	block := getBlock(key)
@@ -58,6 +52,18 @@ func AesDecrypt(encryptedStr, keyStr string) ([]byte, error) {
 	block.decryptor.CryptBlocks(origData, encrypted)
 	origData = _PKCS5UnPadding(origData)
 	return origData, nil
+}
+
+func _PKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padText := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padText...)
+}
+
+func _PKCS5UnPadding(origData []byte) []byte {
+	length := len(origData)
+	unPadding := int(origData[length-1])
+	return origData[:(length - unPadding)]
 }
 
 // using get block speed up the encryption and decryption
