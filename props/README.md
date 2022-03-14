@@ -25,7 +25,4 @@ func main() {
 }
 ```
 
-## notice
-please don't fork this project, but contribute to this project.
-
 
