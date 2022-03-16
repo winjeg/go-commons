@@ -1,0 +1,57 @@
+version: 2.1
+jobs:
+  basic-setup:
+    working_directory: ~/repo
+    docker:
+      - image: golang:1.17.5-buster
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Download project modules
+          command: go mod download
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - run:
+          name: Try build.
+          command: go build .
+
+  test-setup:
+    working_directory: ~/repo
+    docker:
+      - image: golang:1.17.5-buster
+      - image: mysql:5.6.51
+        environment:
+          MYSQL_ROOT_PASSWORD: 4321zxcv
+          MYSQL_DATABASE: cloudb
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: 123456
+    steps:
+      - checkout
+      - run:
+          name: Waiting for MySQL to be ready
+          command: |
+            sleep 20
+            echo done && exit 0
+      - run:
+          name: Install MySQL CLI; Import dummy data; run an example query
+          command: |
+            apt-get update && apt install -y default-mysql-client gcc
+            mysql -h 127.0.0.1 -u testuser -p123456 --execute="use cloudb;  CREATE TABLE app ( app_key varchar(32) NOT NULL, app_secret varchar(128) NOT NULL, PRIMARY KEY (app_key)) ENGINE=InnoDB DEFAULT CHARSET=utf8; INSERT INTO app(app_key, app_secret) VALUES('thekey', 'the_secret');"
+      - run:
+          name: Run tests
+          command: |
+            go build .
+            go test ./...  -race -coverprofile=coverage.txt -covermode=atomic
+            bash <(curl -s https://codecov.io/bash)
+workflows:
+  build_test:
+    jobs:
+      - basic-setup
+      - test-setup:
+          requires:
+            - basic-setup
