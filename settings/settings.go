@@ -67,13 +67,9 @@ func intSql(tableName string) {
 	valCol = "value"
 }
 
-func InitV2(dbConn *sql.DB, autoGenerateId, pg bool) error {
-	return InitV3(dbConn, autoGenerateId, pg, "settings")
-}
-
-func InitV3(dbConn *sql.DB, autoGenerateId, pg bool, tableName string) error {
+func Init(dbConn *sql.DB, autoGenerateId, pg bool, tableName string) error {
 	intSql(tableName)
-	err := Init(dbConn)
+	err := setUp(dbConn)
 	if err != nil {
 		return err
 	}
@@ -82,7 +78,7 @@ func InitV3(dbConn *sql.DB, autoGenerateId, pg bool, tableName string) error {
 	return nil
 }
 
-func Init(dbConn *sql.DB) error {
+func setUp(dbConn *sql.DB) error {
 	if dbConn == nil {
 		return errors.New("db connection should not be nil")
 	}
@@ -144,7 +140,7 @@ func GetVar(name string) string {
 	}
 }
 
-// set variable and update cache
+// SetVar set variable and update cache
 func SetVar(name, value string) {
 	cache.Set(name, value, 1000*60*30)
 	var row *sql.Row
