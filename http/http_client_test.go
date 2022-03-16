@@ -1,6 +1,7 @@
 package http
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -33,4 +34,19 @@ func TestPostDelete(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Empty(t, r2)
 	assert.Empty(t, r3)
+}
+
+
+func TestGetWithHeader(t *testing.T) {
+	r, err := GetWithHeader("https://www.baidu.com", http.Header{
+		"User-Agent":[]string{"Mozilla Sandbox"},
+	})
+	assert.Nil(t, err)
+	assert.True(t, len(r) > 0)
+}
+
+func TestDoRequest(t *testing.T) {
+	r, err := DoRequest(http.MethodGet, "https://www.baidu.com", "", nil)
+	assert.Nil(t, err)
+	assert.True(t, len(r) > 0)
 }
