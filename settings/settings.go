@@ -55,7 +55,7 @@ func intSql(tableName string) {
 	existSqlPg = fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE name= $1", tableName)
 	addSql = fmt.Sprintf("INSERT IGNORE INTO %s(guid,name, value) VALUE(?, ?, ?)", tableName)
 	addSqlPg = fmt.Sprintf("INSERT INTO %s(guid, name, value) VALUES($1, $2, $3)", tableName)
-	addSqlWithId = fmt.Sprintf("INSERT IGNORE INTO %s(guid, name, value) VALUE(?, ?, ?)", tableName)
+	addSqlWithId = fmt.Sprintf("REPLACE INTO %s(guid, name, value) VALUES(?, ?, ?)", tableName)
 	addSqlWithIdPg = fmt.Sprintf("INSERT INTO %s(guid, name, value) VALUES($1, $2, $3)", tableName)
 	deleteVarSql = fmt.Sprintf("DELETE FROM %s WHERE name = ?", tableName)
 	deleteVarSqlPg = fmt.Sprintf("DELETE FROM %s WHERE name = $1", tableName)
