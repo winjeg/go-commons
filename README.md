@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/winjeg/go-commons/branch/master/graph/badge.svg)](https://codecov.io/gh/winjeg/go-commons)
 [![Join the chat at https://gitter.im/winjeg/go-commons](https://img.shields.io/gitter/room/winjeg/go-commons.svg)](https://gitter.im/winjeg/go-commons?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Mit License](https://img.shields.io/badge/license-MIT-blue)]('./LICENSE')
-![MinVer](https://img.shields.io/badge/Golang-1.13-blue)
+![MinVer](https://img.shields.io/badge/Golang-1.16-blue)
 
 golang commonly used  utils and many things else.
 
@@ -173,10 +173,6 @@ read properties from string or from file,and convert a map to a property file
 ip=127.0.0.1
 name=tom
 ```
-
-
-## and others
-... to be planned
 
 
 ## how to contribute 
