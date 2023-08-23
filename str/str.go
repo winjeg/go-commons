@@ -181,7 +181,7 @@ func JoinIfNotEmpty(sep string, args ...string) string {
 }
 
 // export Repeat
-// repeat the string with given times
+//  the string with given times
 func Repeat(str string, n int) string {
 	if len(str) == 0 || n < 2 {
 		return str
@@ -236,4 +236,17 @@ func EndsWith(str, part string) bool {
 	}
 	lastIndex := strings.LastIndex(str, part)
 	return len(str) == len(part)+lastIndex
+}
+
+// Contains to judge if the target is contained in arr
+func Contains(arr []string, target string) bool {
+	if arr == nil {
+		return false
+	}
+	for _, v := range arr {
+		if strings.EqualFold(target, v) {
+			return true
+		}
+	}
+	return false
 }
