@@ -55,6 +55,16 @@ func GetLogger(c interface{}) *logrus.Logger {
 	return logger
 }
 
+func Get() *logrus.Logger {
+	if logger != nil {
+		return logger
+	}
+	lock.Lock()
+	logger = newLogger(nil)
+	lock.Unlock()
+	return logger
+}
+
 func NewLogger(c interface{}) *logrus.Logger {
 	return newLogger(c)
 }
