@@ -5,6 +5,8 @@ package conf
 
 import (
 	"errors"
+	"io/ioutil"
+	"os"
 	"runtime"
 
 	"gopkg.in/ini.v1"
@@ -13,15 +15,26 @@ import (
 
 // Yaml2Object  yaml config file to an object
 func Yaml2Object(fileName string, object interface{}) error {
-	var srcDir = "."
-	if _, fileNameWithPath, _, ok := runtime.Caller(1); ok {
-		srcDir = fileNameWithPath
+	f, openErr := os.Open(fileName)
+	var data []byte
+	if openErr != nil {
+		var srcDir = "."
+		if _, fileNameWithPath, _, ok := runtime.Caller(1); ok {
+			srcDir = fileNameWithPath
+		}
+		data = ReadConfigFile(fileName, srcDir)
+		if data == nil {
+			return errors.New("the specified file cannot be found")
+		}
+	} else {
+		d, err := ioutil.ReadAll(f)
+		if err != nil {
+			return errors.New("read file err: " + err.Error())
+		}
+		data = d
 	}
-	d := ReadConfigFile(fileName, srcDir)
-	if d == nil {
-		return errors.New("the specified file cannot be found")
-	}
-	return yaml.Unmarshal(d, object)
+
+	return yaml.Unmarshal(data, object)
 }
 
 // Ini2Object ini config to object
