@@ -6,6 +6,7 @@ package conf
 import (
 	"errors"
 	"io/ioutil"
+	"log"
 	"os"
 	"runtime"
 
@@ -16,8 +17,10 @@ import (
 // Yaml2Object  yaml config file to an object
 func Yaml2Object(fileName string, object interface{}) error {
 	f, openErr := os.Open(fileName)
+
 	var data []byte
 	if openErr != nil {
+		log.Printf("error open file: %s, err: %v\n", fileName, openErr)
 		var srcDir = "."
 		if _, fileNameWithPath, _, ok := runtime.Caller(1); ok {
 			srcDir = fileNameWithPath
