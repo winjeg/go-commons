@@ -7,6 +7,9 @@
 [![Mit License](https://img.shields.io/badge/license-MIT-blue)]('./LICENSE')
 ![MinVer](https://img.shields.io/badge/Golang-1.16-blue)
 
+[![Goproxy.cn](https://goproxy.cn/stats/github.com/winjeg/go-commons/badges/download-count.svg)](https://goproxy.cn)
+
+
 golang commonly used  utils and many things else.
 
 ## conf
