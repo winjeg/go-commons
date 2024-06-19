@@ -36,7 +36,6 @@ var (
 )
 
 var (
-	logger           = log.GetLogger(nil)
 	db       *sql.DB = nil
 	withId           = false
 	postgres         = false
@@ -157,17 +156,17 @@ func SetVar(name, value string) {
 			if postgres {
 				stmt, err := db.Prepare(addSqlWithIdPg)
 				if err != nil || stmt == nil {
-					logger.Error(err)
+					log.GetLogger(nil).Error(err)
 				}
 				defer stmt.Close()
 				_, execErr := stmt.Exec(id, name, value)
 				if execErr != nil {
-					logger.Error(err)
+					log.GetLogger(nil).Error(err)
 				}
 			} else {
 				_, execErr := db.Exec(addSqlWithId, id, name, value)
 				if execErr != nil {
-					logger.Error(err)
+					log.GetLogger(nil).Error(err)
 				}
 			}
 
@@ -184,25 +183,25 @@ func SetVar(name, value string) {
 			}
 		}
 		if err != nil {
-			logger.Error(err)
+			log.GetLogger(nil).Error(err)
 		}
 	} else {
 		if postgres {
 			stmt, err := db.Prepare(updateSqlPg)
 			if err != nil {
-				logger.Error(err)
+				log.GetLogger(nil).Error(err)
 				return
 			}
 			_, execErr := stmt.Exec(value, name)
 			if execErr != nil {
-				logger.Error(execErr)
+				log.GetLogger(nil).Error(execErr)
 			}
 			defer stmt.Close()
 
 		} else {
 			_, err = db.Exec(updateSql, value, name)
 			if err != nil {
-				logger.Error(err)
+				log.GetLogger(nil).Error(err)
 			}
 		}
 	}
@@ -213,18 +212,18 @@ func DelVar(name string) {
 	if postgres {
 		stmt, err := db.Prepare(deleteVarSqlPg)
 		if err != nil {
-			logger.Error(err)
+			log.GetLogger(nil).Error(err)
 			return
 		}
 		defer stmt.Close()
 		_, execErr := stmt.Exec(name)
 		if execErr != nil {
-			logger.Error(execErr)
+			log.GetLogger(nil).Error(execErr)
 		}
 	} else {
 		_, err := db.Exec(deleteVarSql, name)
 		if err != nil {
-			logger.Error(err)
+			log.GetLogger(nil).Error(err)
 		}
 	}
 }

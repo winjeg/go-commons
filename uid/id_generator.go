@@ -19,14 +19,12 @@ var (
 		MachineID:      nil,       // can be replaced, default is private ip address
 		CheckMachineID: nil,       // the method to make sure the machine id is unique
 	})
-
-	logger = log.GetLogger(nil)
 )
 
 func NextID() uint64 {
 	id, err := snowFlakeInst.NextID()
 	if err != nil {
-		logger.Error(err)
+		log.GetLogger(nil).Error(err)
 		return 0
 	}
 	return id
