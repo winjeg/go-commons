@@ -1,9 +1,6 @@
 package log
 
 import (
-	"bufio"
-	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"reflect"
@@ -29,8 +26,6 @@ var (
 	}
 	lock   sync.Mutex
 	logger *logrus.Logger
-
-	firstCall = 0
 )
 
 const customFormatter = "custom"
@@ -49,25 +44,8 @@ type Settings struct {
 	Formatter    *logrus.Formatter
 }
 
-func printStack() {
-	var buf bytes.Buffer
-	// 获取当前的调用堆栈
-	stack := bufio.NewScanner(bytes.NewReader(debug.Stack()))
-	for stack.Scan() {
-		fmt.Fprintln(&buf, stack.Text())
-	}
-	fmt.Println(buf.String())
-	lock.Lock()
-	defer lock.Unlock()
-	firstCall = 1
-}
-
-// export GetLogger
+// GetLogger export GetLogger
 func GetLogger(c interface{}) *logrus.Logger {
-	if firstCall == 0 {
-		printStack()
-	}
-
 	if logger != nil {
 		return logger
 	}
