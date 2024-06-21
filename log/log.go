@@ -29,6 +29,8 @@ var (
 	}
 	lock   sync.Mutex
 	logger *logrus.Logger
+
+	firstCall = 0
 )
 
 const customFormatter = "custom"
@@ -54,12 +56,17 @@ func printStack() {
 	for stack.Scan() {
 		fmt.Fprintln(&buf, stack.Text())
 	}
-	fmt.Print(buf.String())
+	fmt.Println(buf.String())
+	lock.Lock()
+	defer lock.Unlock()
+	firstCall = 1
 }
 
 // export GetLogger
 func GetLogger(c interface{}) *logrus.Logger {
-	printStack()
+	if firstCall == 0 {
+		printStack()
+	}
 
 	if logger != nil {
 		return logger
