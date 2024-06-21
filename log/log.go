@@ -1,6 +1,9 @@
 package log
 
 import (
+	"bufio"
+	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"reflect"
@@ -44,8 +47,20 @@ type Settings struct {
 	Formatter    *logrus.Formatter
 }
 
+func printStack() {
+	var buf bytes.Buffer
+	// 获取当前的调用堆栈
+	stack := bufio.NewScanner(bytes.NewReader(debug.Stack()))
+	for stack.Scan() {
+		fmt.Fprintln(&buf, stack.Text())
+	}
+	fmt.Print(buf.String())
+}
+
 // export GetLogger
 func GetLogger(c interface{}) *logrus.Logger {
+	printStack()
+
 	if logger != nil {
 		return logger
 	}
