@@ -1,4 +1,4 @@
-package collections
+package cmap
 
 import (
 	"encoding/json"
@@ -39,16 +39,16 @@ func create[K comparable, V any](sharding func(key K) uint32) ConcurrentMap[K, V
 
 // New Creates a new concurrent map.
 func New[V any]() ConcurrentMap[string, V] {
-	return create[string, V](fnv32)
+	return create[string, V](Fnv32)
 }
 
 // NewStringer Creates a new concurrent map.
 func NewStringer[K Stringer, V any]() ConcurrentMap[K, V] {
-	return create[K, V](strfnv32[K])
+	return create[K, V](Strfnv32[K])
 }
 
 // NewWithCustomShardingFunction Creates a new concurrent map.
-func NewWithCustomShardingFunction[K comparable, V any](sharding func(key K) uint32) ConcurrentMap[K, V] {
+func NewWithCustomShardingFunction[K comparable, V any](sharding func(k K) uint32) ConcurrentMap[K, V] {
 	return create[K, V](sharding)
 }
 
@@ -75,13 +75,13 @@ func (m ConcurrentMap[K, V]) Set(key K, value V) {
 	shard.Unlock()
 }
 
-// Callback to return new element to be inserted into the map
+// UpsertCb Callback to return new element to be inserted into the map
 // It is called while lock is held, therefore it MUST NOT
 // try to access other keys in same map, as it can lead to deadlock since
 // Go sync.RWLock is not reentrant
 type UpsertCb[V any] func(exist bool, valueInMap V, newValue V) V
 
-// Insert or Update - updates existing element or inserts a new one using UpsertCb
+// Upsert Insert or Update - updates existing element or inserts a new one using UpsertCb
 func (m ConcurrentMap[K, V]) Upsert(key K, value V, cb UpsertCb[V]) (res V) {
 	shard := m.GetShard(key)
 	shard.Lock()
@@ -92,7 +92,7 @@ func (m ConcurrentMap[K, V]) Upsert(key K, value V, cb UpsertCb[V]) (res V) {
 	return res
 }
 
-// Sets the given value under the specified key if no value was associated with it.
+// SetIfAbsent Sets the given value under the specified key if no value was associated with it.
 func (m ConcurrentMap[K, V]) SetIfAbsent(key K, value V) bool {
 	// Get map shard.
 	shard := m.GetShard(key)
@@ -128,7 +128,7 @@ func (m ConcurrentMap[K, V]) Count() int {
 	return count
 }
 
-// Looks up an item under specified key
+// Has Looks up an item under specified key
 func (m ConcurrentMap[K, V]) Has(key K) bool {
 	// Get shard
 	shard := m.GetShard(key)
@@ -184,7 +184,7 @@ func (m ConcurrentMap[K, V]) IsEmpty() bool {
 	return m.Count() == 0
 }
 
-// Used by the Iter & IterBuffered functions to wrap two variables together over a channel,
+// Tuple Used by the Iter & IterBuffered functions to wrap two variables together over a channel,
 type Tuple[K comparable, V any] struct {
 	Key K
 	Val V
@@ -277,13 +277,13 @@ func (m ConcurrentMap[K, V]) Items() map[K]V {
 	return tmp
 }
 
-// Iterator callbacalled for every key,value found in
+// IterCb Iterator callback called for every key,value found in
 // maps. RLock is held for all calls for a given shard
 // therefore callback sess consistent view of a shard,
 // but not across the shards
 type IterCb[K comparable, V any] func(key K, v V)
 
-// Callback based iterator, cheapest way to read
+// IterCb Callback based iterator, cheapest way to read
 // all elements in a map.
 func (m ConcurrentMap[K, V]) IterCb(fn IterCb[K, V]) {
 	for idx := range m.shards {
@@ -327,7 +327,7 @@ func (m ConcurrentMap[K, V]) Keys() []K {
 	return keys
 }
 
-// Reviles ConcurrentMap "private" variables to json marshal.
+// MarshalJSON Reviles ConcurrentMap "private" variables to json marshal.
 func (m ConcurrentMap[K, V]) MarshalJSON() ([]byte, error) {
 	// Create a temporary map, which will hold all item spread across shards.
 	tmp := make(map[K]V)
@@ -338,11 +338,11 @@ func (m ConcurrentMap[K, V]) MarshalJSON() ([]byte, error) {
 	}
 	return json.Marshal(tmp)
 }
-func strfnv32[K fmt.Stringer](key K) uint32 {
-	return fnv32(key.String())
+func Strfnv32[K fmt.Stringer](key K) uint32 {
+	return Fnv32(key.String())
 }
 
-func fnv32(key string) uint32 {
+func Fnv32(key string) uint32 {
 	hash := uint32(2166136261)
 	const prime32 = uint32(16777619)
 	keyLength := len(key)
@@ -353,7 +353,7 @@ func fnv32(key string) uint32 {
 	return hash
 }
 
-// Reverse process of Marshal.
+// UnmarshalJSON Reverse process of Marshal.
 func (m *ConcurrentMap[K, V]) UnmarshalJSON(b []byte) (err error) {
 	tmp := make(map[K]V)
 
