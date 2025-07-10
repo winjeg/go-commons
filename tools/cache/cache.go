@@ -114,13 +114,9 @@ func (cm *cacheManager[K, V]) cleanTasks() {
 		}
 	}()
 
-	ticker := time.NewTicker(time.Second * time.Duration(cm.cleanInterval))
 	for {
-		select {
-		case <-ticker.C:
-			cm.clean()
-		default:
-		}
+		time.Sleep(time.Second * time.Duration(cm.cleanInterval))
+		cm.clean()
 	}
 }
 
