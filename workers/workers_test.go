@@ -21,5 +21,5 @@ func TestNewPool(t *testing.T) {
 
 func doDemoWork() error {
 	time.Sleep(time.Millisecond * 100)
-	return errors.New("error occcured")
+	return errors.New("error occurred")
 }
