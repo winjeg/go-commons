@@ -1,12 +1,10 @@
 # go-commons
 [![CircleCI](https://circleci.com/gh/winjeg/go-commons/tree/master.svg?style=svg)](https://circleci.com/gh/winjeg/go-commons/?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/winjeg/go-commons)](https://goreportcard.com/report/github.com/winjeg/go-commons)
-[![GolangCI](https://golangci.com/badges/github.com/winjeg/go-commons.svg)](https://golangci.com/r/github.com/winjeg/go-commons)
 [![codecov](https://codecov.io/gh/winjeg/go-commons/branch/master/graph/badge.svg)](https://codecov.io/gh/winjeg/go-commons)
 [![Join the chat at https://gitter.im/winjeg/go-commons](https://img.shields.io/gitter/room/winjeg/go-commons.svg)](https://gitter.im/winjeg/go-commons?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Mit License](https://img.shields.io/badge/license-MIT-blue)]('./LICENSE')
 ![MinVer](https://img.shields.io/badge/Golang-1.16-blue)
-
 [![Goproxy.cn](https://goproxy.cn/stats/github.com/winjeg/go-commons/badges/download-count.svg)](https://goproxy.cn)
 
 
