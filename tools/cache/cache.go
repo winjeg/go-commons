@@ -2,8 +2,9 @@ package cache
 
 import (
 	"github.com/winjeg/go-commons/tools/cmap"
-	"log"
+	"github.com/winjeg/go-commons/tools/cmp"
 
+	"log"
 	"sync/atomic"
 	"time"
 )
@@ -70,6 +71,12 @@ func NewCacheWithConfig[V any](ci, sc int) *cacheManager[string, V] {
 	return NewCustomCache[string, V](ci, sc, cmap.Fnv32)
 }
 
+func NewIntCache[K cmp.Number, V any](ci, sc int) *cacheManager[K, V] {
+	return NewCustomCache[K, V](ci, sc, func(k K) uint32 {
+		return uint32(k)
+	})
+}
+
 func (cm *cacheManager[K, V]) Get(k K) (V, bool) {
 	if v, ok := cm.Cache.Get(k); ok {
 		if r, ok := v.Get(); ok {
@@ -96,6 +103,20 @@ func (cm *cacheManager[K, V]) PutExp(k K, val V, exp int) {
 	}
 	cv.Set(val, expire)
 	cm.Cache.Set(k, cv)
+}
+
+func (cm *cacheManager[K, V]) PutExpIfAbsent(k K, f func(k K) V, exp int) V {
+	if v, ok := cm.Get(k); ok {
+		return v
+	} else {
+		v := f(k)
+		cm.PutExp(k, v, exp)
+		return v
+	}
+}
+
+func (cm *cacheManager[K, V]) PutIfAbsent(k K, f func(k K) V) V {
+	return cm.PutExpIfAbsent(k, f, -1)
 }
 
 func (cm *cacheManager[K, V]) Put(k K, val V) {

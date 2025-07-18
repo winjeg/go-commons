@@ -3,6 +3,7 @@ package cache
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"math"
 	"strconv"
 	"testing"
 	"time"
@@ -39,6 +40,15 @@ func TestGet(t *testing.T) {
 	_, ok = intCache.Get(1)
 	assert.True(t, !ok)
 	assert.Equal(t, int(intCache.expireCount.Load()), 1)
+
+	f := func(k uint) bool { return k*k > 100 }
+	uintCache := NewIntCache[uint, bool](math.MaxInt32, math.MaxInt32)
+	uintCache.PutIfAbsent(13, f)
+	uintCache.PutIfAbsent(9, f)
+	uv1, _ := uintCache.Get(13)
+	uv2, _ := uintCache.Get(9)
+	assert.Equal(t, uv1, true)
+	assert.Equal(t, uv2, false)
 }
 
 func BenchmarkCacheManager_Get(b *testing.B) {
@@ -50,4 +60,11 @@ func BenchmarkCacheManager_Get(b *testing.B) {
 		strCache.Get(k)
 	}
 	b.ReportAllocs()
+}
+
+func TestConvert(t *testing.T) {
+	x := 310293.2131
+	y := 87387128378173
+	fmt.Println(uint32(x))
+	fmt.Println(uint32(y))
 }
