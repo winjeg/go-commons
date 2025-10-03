@@ -181,7 +181,8 @@ func JoinIfNotEmpty(sep string, args ...string) string {
 }
 
 // export Repeat
-//  the string with given times
+//
+//	the string with given times
 func Repeat(str string, n int) string {
 	if len(str) == 0 || n < 2 {
 		return str
