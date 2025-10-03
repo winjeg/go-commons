@@ -131,3 +131,24 @@ func TestStrMatch(t *testing.T) {
 	assert.True(t, EndsWith("abc", ""))
 	assert.False(t, EndsWith("abc", "ac"))
 }
+
+func TestJoinNumber(t *testing.T) {
+	s := JoinNumber([]int{1, 2, 3}, ",")
+	assert.Equal(t, "1,2,3", s)
+	s2 := JoinNumber([]float64{1.1, 2.2, 3.3}, "-")
+	assert.Equal(t, "1.1-2.2-3.3", s2)
+}
+
+func TestContainsNumber(t *testing.T) {
+	s := "1,2,3,4,5,2.1,-0.1"
+	assert.True(t, ContainsNumber(s, ",", 3))
+	assert.False(t, ContainsNumber(s, ",", 6))
+	assert.True(t, ContainsNumber(s, ",", int8(3)))
+	assert.False(t, ContainsNumber(s, ",", int8(6)))
+	assert.True(t, ContainsNumber(s, ",", 2.1))
+	assert.False(t, ContainsNumber(s, ",", 2.2))
+	assert.True(t, ContainsNumber(s, ",", -0.1))
+	assert.False(t, ContainsNumber(s, ",", -0.2))
+	assert.False(t, ContainsNumber("", ",", -0.2))
+
+}

@@ -2,6 +2,7 @@ package str
 
 import (
 	"bytes"
+	"fmt"
 	"strconv"
 	"strings"
 	"unsafe"
@@ -246,6 +247,34 @@ func Contains(arr []string, target string) bool {
 	}
 	for _, v := range arr {
 		if strings.EqualFold(target, v) {
+			return true
+		}
+	}
+	return false
+}
+
+type number interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~float32 | ~float64
+}
+
+func JoinNumber[T number](arr []T, sep string) string {
+	if len(arr) == 0 {
+		return ""
+	}
+	var result string
+	for _, v := range arr {
+		result += fmt.Sprintf("%v", v) + sep
+	}
+	return result[:len(result)-1]
+}
+
+func ContainsNumber[T number](str string, sep string, target T) bool {
+	if len(str) == 0 {
+		return false
+	}
+	arr := strings.Split(str, sep)
+	for _, v := range arr {
+		if fmt.Sprintf("%v", target) == v {
 			return true
 		}
 	}
