@@ -7,10 +7,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/winjeg/go-commons/tools/cache"
 	"strings"
 
 	"github.com/winjeg/go-commons/log"
+	"github.com/winjeg/go-commons/tools/cache"
 	"github.com/winjeg/go-commons/uid"
 )
 

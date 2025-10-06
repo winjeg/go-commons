@@ -3,7 +3,7 @@ package http
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -48,7 +48,7 @@ func Get(url string) (string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
 	return string(data), err
 }
@@ -65,10 +65,10 @@ func GetWithHeader(url string, header http.Header) (string, error) {
 		return "", err
 	}
 	if resp.StatusCode != http.StatusOK {
-		data, _ := ioutil.ReadAll(resp.Body)
+		data, _ := io.ReadAll(resp.Body)
 		return string(data), errors.New(fmt.Sprintf("Error with not correct status code %s", resp.Status))
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
 	return string(data), err
 }
@@ -85,7 +85,7 @@ func Post(url, content string) (string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
 	return string(data), err
 }
@@ -110,7 +110,7 @@ func Put(url, content string) (string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
 	return string(data), err
 }
@@ -136,7 +136,7 @@ func Delete(url, content string) (string, error) {
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
 	return string(data), err
 }
@@ -160,7 +160,7 @@ func DoRequest(method, url, content string, header http.Header) (string, error) 
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
 	return string(data), err
 }
