@@ -66,7 +66,7 @@ func GetWithHeader(url string, header http.Header) (string, error) {
 	}
 	if resp.StatusCode != http.StatusOK {
 		data, _ := io.ReadAll(resp.Body)
-		return string(data), errors.New(fmt.Sprintf("Error with not correct status code %s", resp.Status))
+		return string(data), fmt.Errorf("error with not correct status code %s", resp.Status)
 	}
 	data, err := io.ReadAll(resp.Body)
 	defer safeClose(resp)
