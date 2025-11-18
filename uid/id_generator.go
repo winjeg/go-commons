@@ -1,6 +1,7 @@
 package uid
 
 import (
+	"github.com/winjeg/go-commons/tools/ip"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -15,11 +16,16 @@ import (
 var (
 	timeStart, _  = time.Parse("2006-01-02 15:04:05", "2019-07-01 12:00:00")
 	snowFlakeInst = sonyflake.NewSonyflake(sonyflake.Settings{
-		StartTime:      timeStart, // start time
-		MachineID:      nil,       // can be replaced, default is private ip address
-		CheckMachineID: nil,       // the method to make sure the machine id is unique
+		StartTime:      timeStart,    // start time
+		MachineID:      getMachineID, // can be replaced, default is private ip address
+		CheckMachineID: nil,          // the method to make sure the machine id is unique
 	})
 )
+
+func getMachineID() (uint16, error) {
+	num, _ := ip.IPv4ToUint32(ip.GetIPv4Addr())
+	return uint16(num & 0xffff), nil
+}
 
 func NextID() uint64 {
 	id, err := snowFlakeInst.NextID()
