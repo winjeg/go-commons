@@ -12,4 +12,5 @@ func TestGetLocalIPs(t *testing.T) {
 	intIP, _ := IPv4ToUint32(ip)
 	assert.Equal(t, ip, Uint32ToIPv4(intIP))
 	fmt.Println(Uint32ToIPv4(intIP & 0xffff))
+	fmt.Println(PublicIPv4())
 }

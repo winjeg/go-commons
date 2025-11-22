@@ -2,13 +2,19 @@ package ip
 
 import (
 	"fmt"
+	"io"
 	"net"
+	"net/http"
 	"sync"
+	"time"
 )
 
 var (
-	once     sync.Once = sync.Once{}
-	ipv4Addr string
+	once       sync.Once = sync.Once{}
+	ipv4Addr   string
+	lock       = sync.Mutex{}
+	publicIP   string
+	lastUpdate = time.Now()
 )
 
 func setIPv4Addr() {
@@ -72,4 +78,48 @@ func getMainIPv4() (string, error) {
 		return "", err
 	}
 	return ips[0], nil
+}
+
+// 获取公网IP的函数
+func getPublicIP() (string, error) {
+	// 定义多个IP查询服务，增加可靠性
+	services := []string{
+		"https://api.ipify.org",
+		"https://ident.me",
+		"https://ifconfig.me/ip",
+		"https://ipecho.net/plain",
+		"https://myexternalip.com/raw",
+	}
+
+	client := &http.Client{
+		Timeout: 3 * time.Second,
+	}
+
+	// 尝试每个服务，直到成功获取
+	for _, service := range services {
+		resp, err := client.Get(service)
+		if err != nil {
+			continue // 失败则尝试下一个
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode == http.StatusOK {
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				continue
+			}
+			return string(body), nil
+		}
+	}
+	return "", fmt.Errorf("无法从任何服务获取公网IP")
+}
+
+func PublicIPv4() string {
+	if len(publicIP) == 0 || lastUpdate.Add(time.Minute).Before(time.Now()) {
+		lock.Lock()
+		publicIP, _ = getPublicIP()
+		lastUpdate = time.Now()
+		lock.Unlock()
+	}
+	return publicIP
 }
