@@ -1,8 +1,9 @@
 package ip
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
+
+	"fmt"
 	"testing"
 )
 
