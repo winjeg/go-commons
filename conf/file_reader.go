@@ -4,7 +4,6 @@
 package conf
 
 import (
-	"os"
 	"path/filepath"
 )
 
