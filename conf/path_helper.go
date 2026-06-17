@@ -1,119 +1,79 @@
 package conf
 
 import (
-	"log"
 	"os"
-	"path"
 	"path/filepath"
-	"runtime"
-	"strings"
 )
 
-func getPathSep() string {
-	pathSep := "/"
-	if strings.EqualFold(runtime.GOOS, "windows") {
-		pathSep = `\`
+// getFileDirFromSrc 从源代码所在目录向上搜索配置文件
+// 不改变工作目录，使用绝对路径操作
+// fileName: 要查找的文件名
+// srcFile: 源文件的路径
+// 返回找到配置文件的目录，若未找到返回空字符串
+func getFileDirFromSrc(fileName, srcFile string) string {
+	// 获取源文件的绝对路径
+	dir, err := filepath.Abs(srcFile)
+	if err != nil {
+		return ""
 	}
-	return pathSep
-}
 
-// get parent directory of the current directory
-func getParentDirectory(directory string) string {
-	if strings.LastIndex(directory, getPathSep()) == len(directory)-1 {
-		directory = directory[:len(directory)-1]
+	// 如果srcFile指向文件，获取其所在目录
+	if info, err := os.Stat(dir); err == nil && !info.IsDir() {
+		dir = filepath.Dir(dir)
 	}
-	runes := []rune(directory)
-	return string(runes[0:strings.LastIndex(directory, getPathSep())])
-}
 
-// get config file from where the source code lies
-func getFileDirFromSrc(fileName, srcDir string) string {
-	dir, _ := filepath.Abs(srcDir)
-	tmpFile, _ := os.Stat(dir)
-	if tmpFile != nil && !tmpFile.IsDir() {
-		lastIdx := strings.LastIndex(dir, getPathSep())
-		if lastIdx >= 0 {
-			dir = dir[:lastIdx]
+	// 从源文件所在目录向上逐层搜索
+	currentDir := dir
+	for {
+		// 检查当前目录是否包含配置文件
+		configPath := filepath.Join(currentDir, fileName)
+		if _, err := os.Stat(configPath); err == nil {
+			return currentDir
 		}
+
+		// 获取父目录
+		parentDir := filepath.Dir(currentDir)
+
+		// 如果已经到达根目录，停止搜索
+		if parentDir == currentDir {
+			// 已到达文件系统根目录
+			return ""
+		}
+
+		currentDir = parentDir
+	}
+}
+
+// getFileDirFromExecutable 从可执行文件所在目录查找配置文件
+// fileName: 要查找的文件名
+// 返回找到配置文件的目录，若未找到返回空字符串
+func getFileDirFromExecutable(fileName string) string {
+	execPath, err := os.Executable()
+	if err != nil {
+		return ""
 	}
 
-	f, err := os.Open(path.Join(dir, fileName))
-	if err == nil {
-		logError(f.Close())
+	dir := filepath.Dir(execPath)
+	configPath := filepath.Join(dir, fileName)
+
+	if _, err := os.Stat(configPath); err == nil {
 		return dir
 	}
-	// change to the dir that contains the source code
-	cdErr := os.Chdir(dir)
-	logError(cdErr)
 
-	reachRoot := false
-	for err != nil {
-		er := os.Chdir("..")
-		logError(er)
-		dir = getParentDirectory(dir)
-		if strings.EqualFold(runtime.GOOS, "windows") {
-			// windows
-			if len(dir) < 3 {
-				// like C:  or D:
-				reachRoot = true
-			}
-		} else {
-			// osx or linux
-			if len(dir) < 2 {
-				// like /
-				reachRoot = true
-			}
-		}
-		f, err = os.Open(path.Join(dir, fileName))
-		// find to the root of all dirs
-		if reachRoot {
-			if err != nil {
-				return ""
-			}
-			return dir
-		}
-	}
-	defer func() {
-		if f != nil {
-			err := f.Close()
-			logError(err)
-		}
-	}()
-	// return found file
-	return dir
+	return ""
 }
 
-func logError(err error) {
-	if err != nil {
-		log.Println("error changing dir...", err)
-	}
-}
-
-// get config file from where the executables lies
-func getFileDirFromExecutable(fileName string) string {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		return ""
-	}
-	f, err := os.Open(path.Join(dir, fileName))
-	defer func() {
-		if f != nil {
-			f.Close()
-		}
-	}()
-	if err != nil {
-		return ""
-	}
-	return dir
-}
-
-// ReadConfigFile  read config file first from where the executable file lies
-// then where the source code lies, or it's parent directory recursively
+// FindDirOfFile 查找配置文件所在目录
+// 优先从可执行文件目录查找，然后从源代码目录向上查找
+// fileName: 配置文件名 (e.g., "config.yaml")
+// srcFile: 调用者的源文件路径 (通过 runtime.Caller 获得)
+// 返回找到配置文件的目录，若未找到返回空字符串
 func FindDirOfFile(fileName, srcFile string) string {
-	dir := ""
-	dir = getFileDirFromExecutable(fileName)
-	if len(dir) == 0 {
-		dir = getFileDirFromSrc(fileName, srcFile)
+	// 策略1：从可执行文件所在目录查找
+	if dir := getFileDirFromExecutable(fileName); dir != "" {
+		return dir
 	}
-	return dir
+
+	// 策略2：从源代码所在目录向上查找
+	return getFileDirFromSrc(fileName, srcFile)
 }

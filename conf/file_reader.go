@@ -4,30 +4,34 @@
 package conf
 
 import (
-	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 )
 
-// ReadConfigFile  read config file first from where the executable file lies
-// then where the source code lies, or it's parent directory recursively
+// ReadConfigFile 读取配置文件内容
+// 查找顺序：
+// 1. 尝试直接打开文件
+// 2. 在源文件目录及其父目录中搜索
+// fileName: 配置文件名
+// srcFile: 源文件路径（通过 runtime.Caller 获取）
+// 返回文件内容，若文件不存在返回 nil
 func ReadConfigFile(fileName, srcFile string) []byte {
+	// 策略1：尝试直接打开文件
+	if data, err := readFile(fileName); err == nil {
+		return data
+	}
+
+	// 策略2：在源文件目录及其父目录中搜索
 	dir := FindDirOfFile(fileName, srcFile)
-	if len(dir) == 0 {
+	if dir == "" {
 		return nil
 	}
-	f, openErr := os.Open(path.Join(dir, fileName))
-	if openErr != nil {
-		return nil
-	}
-	d, err := ioutil.ReadAll(f)
-	defer func() {
-		if f != nil {
-			logError(f.Close())
-		}
-	}()
+
+	configPath := filepath.Join(dir, fileName)
+	data, err := readFile(configPath)
 	if err != nil {
 		return nil
 	}
-	return d
+
+	return data
 }
