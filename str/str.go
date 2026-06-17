@@ -208,16 +208,24 @@ func JoinStr(strArr ...string) string {
 	return buffer.String()
 }
 
-// ToBytes convert a string to a byte
+// ToBytes convert a string to a byte array
+// 
+// This uses Go 1.20+ unsafe APIs for efficient zero-copy conversion.
+// The caller must ensure the returned byte array is not used
+// after the original string is garbage collected.
 func ToBytes(str string) []byte {
-	bs := (*[2]uintptr)(unsafe.Pointer(&str))
-	b := [3]uintptr{bs[0], bs[1], bs[1]}
-	return *(*[]byte)(unsafe.Pointer(&b))
+	if len(str) == 0 {
+		return []byte{}
+	}
+	return unsafe.Slice(unsafe.StringData(str), len(str))
 }
 
 // FromBytes convert a byte array to a string
+// 
+// This function creates a copy of the byte array data.
+// The returned string is independent and safe to use.
 func FromBytes(data []byte) string {
-	return *(*string)(unsafe.Pointer(&data))
+	return string(data)
 }
 
 // StartsWith to judge if the given str starts with
