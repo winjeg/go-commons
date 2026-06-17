@@ -42,14 +42,14 @@ func GetWithParams(uri string, paramMap map[string]string) (string, error) {
 // Get request by url
 func Get(url string) (string, error) {
 	resp, err := httpClient.Get(url)
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil {
 		return "", err
 	}
+	defer safeClose(resp)
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
 	data, err := io.ReadAll(resp.Body)
-	defer safeClose(resp)
 	return string(data), err
 }
 
@@ -64,12 +64,12 @@ func GetWithHeader(url string, header http.Header) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	defer safeClose(resp)
 	if resp.StatusCode != http.StatusOK {
 		data, _ := io.ReadAll(resp.Body)
 		return string(data), fmt.Errorf("error with not correct status code %s", resp.Status)
 	}
 	data, err := io.ReadAll(resp.Body)
-	defer safeClose(resp)
 	return string(data), err
 }
 
@@ -82,11 +82,11 @@ func Post(url, content string) (string, error) {
 		logger.Errorf("Error post to %s, error : %v", url, err)
 		return "", err
 	}
+	defer safeClose(resp)
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
 	data, err := io.ReadAll(resp.Body)
-	defer safeClose(resp)
 	return string(data), err
 }
 
@@ -107,11 +107,11 @@ func Put(url, content string) (string, error) {
 		logger.Errorf("%v", err)
 		return "", err
 	}
+	defer safeClose(resp)
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
 	data, err := io.ReadAll(resp.Body)
-	defer safeClose(resp)
 	return string(data), err
 }
 
@@ -133,16 +133,16 @@ func Delete(url, content string) (string, error) {
 		logger.Errorf("%v", err)
 		return "", err
 	}
+	defer safeClose(resp)
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
 	data, err := io.ReadAll(resp.Body)
-	defer safeClose(resp)
 	return string(data), err
 }
 
-// export Delete
-// delete request by url
+// export DoRequest
+// generic request method by url
 // content type is application/json
 func DoRequest(method, url, content string, header http.Header) (string, error) {
 	logger := log.GetLogger(nil)
@@ -157,11 +157,11 @@ func DoRequest(method, url, content string, header http.Header) (string, error) 
 		logger.Errorf("%v\n", err)
 		return "", err
 	}
+	defer safeClose(resp)
 	if resp.StatusCode != http.StatusOK {
 		return "", errors.New("error with status code:" + strconv.Itoa(resp.StatusCode))
 	}
 	data, err := io.ReadAll(resp.Body)
-	defer safeClose(resp)
 	return string(data), err
 }
 
